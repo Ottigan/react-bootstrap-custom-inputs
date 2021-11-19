@@ -51,9 +51,9 @@ class App extends Component {
 | name | true | string representing State property | - |
 | list | true | array of objects with `key`(unique string), `value`(string), `title`(optional string) properties | - |
 | label | false | string | - |
-| value | false | string or string[] | moment() |
+| value | false | string or string[] matching `key` property of `list` objects | moment() |
 | className | false | string | - |
-| autoComplete | false | 'on'/'off' | 'off' |
+| autoComplete | false | 'on' or 'off' | 'off' |
 | multiselect | false | bool | false |
 | required | false | bool | false |
 | disableDeselect | false | bool | false |
