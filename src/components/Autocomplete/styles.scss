@@ -1,0 +1,39 @@
+$box-shadow-color: hsla(0, 0%, 50%, 0.2);
+$valid-bg-color: hsl(150, 47%, 78%);
+$valid-color: hsl(152, 69%, 19%);
+
+.autocomplete-component {
+  .autocomplete-item-container {
+    max-height: 0px;
+    width: 100%;
+    z-index: 1;
+    background-color: white;
+    transition: all 0.1s ease-in;
+
+    &.show {
+      min-height: 40px;
+      max-height: 300px;
+      box-shadow: -10px 7px 10px $box-shadow-color, 10px 7px 10px $box-shadow-color;
+    }
+
+    .selected {
+      color: $valid-color;
+      background-color: $valid-bg-color;
+    }
+
+    li {
+      ul {
+        padding-left: 0;
+        list-style: none;
+      }
+
+      button {
+        border-bottom: 0;
+
+        &.parent {
+          font-weight: 600;
+        }
+      }
+    }
+  }
+}

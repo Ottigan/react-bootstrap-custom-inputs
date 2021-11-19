@@ -1,0 +1,113 @@
+$box-shadow-color: hsla(0, 0%, 50%, 0.2);
+$valid-bg-color: hsl(150, 47%, 78%);
+$valid-color: hsl(152, 69%, 19%);
+
+.date-picker-component {
+  position: relative;
+
+  .angle-arrow {
+    height: 1em;
+    vertical-align: -0.125em;
+  }
+
+  .date-picker-container {
+    position: absolute;
+    z-index: 1;
+    max-height: 0px;
+    transition: all 0.1s ease-in;
+
+    &.show {
+      min-height: 40px;
+      max-height: 300px;
+      box-shadow: -10px 7px 10px $box-shadow-color, 10px 7px 10px $box-shadow-color;
+    }
+
+    .table {
+      width: 315px;
+      border-radius: 5px;
+      background-color: white;
+      border-collapse: separate;
+      border-spacing: 0;
+
+      thead {
+        .date-picker-prev,
+        .date-picker-next {
+          margin: 0;
+          padding: 0;
+
+          &:hover {
+            border-color: rgba(0, 0, 0, 0);
+            background-color: unset;
+          }
+        }
+
+        tr:first-of-type th {
+          text-align: center;
+          vertical-align: middle;
+          border-bottom-width: 1px;
+
+          &:first-of-type {
+            border-top-left-radius: 5px;
+            border-right-width: 0;
+          }
+
+          &:last-of-type {
+            border-top-right-radius: 5px;
+          }
+        }
+
+        .date-picker-heading {
+          width: 45px;
+          text-align: center;
+          font-size: 13px;
+        }
+      }
+
+      tbody {
+        tr td {
+          height: 45px;
+          position: relative;
+          padding: 0px;
+          text-align: center;
+          vertical-align: middle;
+          border-width: 0px 0px 1px 1px;
+
+          &.checked {
+            color: $valid-color;
+            background-color: $valid-bg-color;
+          }
+
+          &:last-child {
+            text-align: center;
+            border-right-width: 1px;
+          }
+
+          input[type='checkbox'] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            cursor: pointer;
+            opacity: 0;
+          }
+        }
+
+        & tr:last-of-type {
+          td {
+            border-bottom-width: 1px;
+
+            &:first-of-type {
+              border-bottom-left-radius: 5px;
+              border-right-width: 0;
+            }
+            &:nth-child(7) {
+              border-bottom-right-radius: 5px;
+            }
+          }
+        }
+      }
+    }
+  }
+}

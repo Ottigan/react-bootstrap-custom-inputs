@@ -1,0 +1,110 @@
+$container-box-shadow-color: hsla(0, 0%, 50%, 0.2);
+$container-bg-color: hsl(0, 0%, 100%);
+$highlighted-color: hsl(0, 0%, 100%);
+$highlighted-bg-color: hsl(212, 100%, 60%);
+$checked-bg-color: hsl(150, 47%, 78%);
+$checked-color: hsl(152, 69%, 19%);
+$border-color: hsla(0, 0%, 0%, 0.25);
+$focused-border-color: hsl(216, 98%, 76%);
+$focused-box-shadow-color: hsla(216, 98%, 52%, 0.251);
+$is-valid-border-color: hsl(152, 69%, 31%);
+$is-valid-box-shadow-color: hsla(152, 69%, 31%, 0.25);
+$is-invalid-border-color: hsl(354, 70%, 54%);
+$is-invalid-box-shadow-color: hsla(354, 70%, 54%, 0.25);
+
+.time-picker-component {
+  position: relative;
+
+  .time-picker-input {
+    position: absolute;
+    cursor: default;
+    top: 0;
+    left: 0;
+    z-index: -1;
+  }
+
+  .time-picker-input-dummy {
+    user-select: none;
+
+    &.focus {
+      background-color: $container-bg-color;
+      border-color: $focused-border-color;
+      box-shadow: 0 0 0 0.25rem $focused-box-shadow-color;
+
+      &.is-valid {
+        border-color: $is-valid-border-color;
+        box-shadow: 0 0 0 0.25rem $is-valid-box-shadow-color;
+      }
+
+      &.is-invalid {
+        border-color: $is-invalid-border-color;
+        box-shadow: 0 0 0 0.25rem $is-invalid-box-shadow-color;
+      }
+    }
+
+    .time-picker-hours,
+    .time-picker-minutes {
+      padding: 1px 1px 2px 1px;
+
+      &.highlighted {
+        color: $highlighted-color;
+        background-color: $highlighted-bg-color;
+      }
+    }
+  }
+
+  .time-picker-container {
+    position: absolute;
+    z-index: 1;
+    max-height: 0px;
+    background-color: $container-bg-color;
+    transition: all 0.1s ease-in;
+
+    &.show {
+      min-height: 40px;
+      max-height: 300px;
+      box-shadow: -10px 7px 10px $container-box-shadow-color, 10px 7px 10px $container-box-shadow-color;
+    }
+
+    ul {
+      height: 300px;
+      padding: 0;
+      border: 1px solid $border-color;
+      scrollbar-width: none;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+
+      label {
+        position: relative;
+        border-bottom: 1px solid $border-color;
+        text-align: center;
+        vertical-align: middle;
+        line-height: 20px;
+        width: 50px;
+        padding: 10px;
+
+        &.checked {
+          color: $checked-color;
+          background-color: $checked-bg-color;
+        }
+
+        input[type='checkbox'] {
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 100%;
+          width: 100%;
+          margin: 0;
+          cursor: pointer;
+          opacity: 0;
+        }
+      }
+
+      &:nth-child(2) {
+        border-left-width: 0px;
+      }
+    }
+  }
+}
