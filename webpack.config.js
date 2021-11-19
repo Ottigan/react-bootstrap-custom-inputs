@@ -11,13 +11,13 @@ const config = {
     path: path.resolve(__dirname, 'dist'),
   },
   devServer: {
-    port: 8080,
+    port: 3000,
     static: path.resolve(__dirname, 'dist'),
     hot: true,
     open: true,
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.scss'],
+    extensions: ['.js', '.jsx'],
   },
   plugins: [],
   module: {
@@ -29,8 +29,9 @@ const config = {
           loader: 'babel-loader',
           options: {
             presets: [
-              ['@babel/preset-env', { useBuiltIns: 'usage', corejs: 3, targets: 'defaults' }],
-              ['@babel/preset-react', { runtime: 'automatic' }]],
+              ['@babel/preset-env', { useBuiltIns: 'usage', corejs: 3 }],
+              ['@babel/preset-react', { runtime: 'automatic' }],
+            ],
           },
         },
       },
