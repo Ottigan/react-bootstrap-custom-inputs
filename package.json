@@ -1,6 +1,7 @@
 {
   "name": "react-bootstrap-custom-inputs",
-  "version": "1.1.5",
+  "version": "1.1.6",
+  "description": "React compatible inputs adhering to Bootstrap theme.",
   "keywords": [
     "react",
     "components",
