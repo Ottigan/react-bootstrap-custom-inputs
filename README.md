@@ -3,19 +3,14 @@
 ## Import components:
 ```
 import React, { Component } from 'react';
-import { DatePicker } from 'react-bootstrap-custom-inputs';
+import { DatePicker } from '../dist';
 
 class App extends Component {
   constructor(props) {
     super(props);
 
-    const fromDate = moment(startAt).format('YYYY-MM-DD');
-    const fromTime = moment(startAt).format('HH:mm');
-    const toDate = moment(endAt).format('YYYY-MM-DD');
-    const toTime = moment(endAt).format('HH:mm');
-
     this.state = {
-      dates: '2021-01-31',
+      date: '2021-01-31',
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -30,18 +25,26 @@ class App extends Component {
   }
 
   render() {
+    const { date } = this.state;
+
     return (
-      <DatePicker
-        onChange={this.handleChange}
-        value={date}
-        name="date"
-        label="Date"
-        required
-        className="col-4"
-      />
-    )
+      <div className="container-fluid vh-100">
+        <div className="row h-75 justify-content-center align-items-center">
+          <DatePicker
+            onChange={this.handleChange}
+            value={date}
+            name="date"
+            label="Date"
+            required
+            className="col-4"
+          />
+        </div>
+      </div>
+    );
   }
 }
+
+export default App;
 ```
 
 ### Autocomplete Props:
