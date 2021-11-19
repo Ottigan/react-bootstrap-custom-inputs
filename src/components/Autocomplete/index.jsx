@@ -116,8 +116,6 @@ class Autocomplete extends Component {
       const value = multiselect ? selectedItems.map((item) => item.key) : selectedItems?.[0]?.key;
       const isValid = !!value.length;
 
-      console.log(isValid);
-
       this.setState({ showContainer: false, isValid }, () => {
         this.renderSelectedPreview();
         onChange({ target: { name, value } });
