@@ -3,7 +3,7 @@
 ## Import components:
 ```
 import React, { Component } from 'react';
-import { DatePicker } from '../dist';
+import { DatePicker } from 'react-bootstrap-custom-inputs';
 
 class App extends Component {
   constructor(props) {
