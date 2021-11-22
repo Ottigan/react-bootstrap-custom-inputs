@@ -54,7 +54,7 @@ export default App;
 | name | true | string representing State property | - |
 | list | true | array of objects with `key`(unique string), `value`(string), `title`(optional string) properties | - |
 | label | false | string | - |
-| value | false | string or string[] matching `key` property of `list` objects | moment() |
+| value | false | string or string[] matching `key` property of `list` objects | - |
 | className | false | string | - |
 | autoComplete | false | 'on' or 'off' | 'off' |
 | multiselect | false | bool | false |
@@ -87,7 +87,6 @@ export default App;
 | label | false | string | - |
 | value | false | string in RFC2822 or ISO format | '--:--' |
 | className | false | string | - |
-| multiselect | false | bool | false |
 | required | false | bool | false |
 | valid | false | bool | - |
 | disabled | false | bool | false |

@@ -92,7 +92,9 @@ class Autocomplete extends Component {
     const { name } = e.target;
 
     if (name === 'filter' && !showContainer) {
-      const refreshedItems = items.sort((a, b) => b.isSelected - a.isSelected);
+      const refreshedItems = items
+        .map((item) => ({ ...item, isVisible: true }))
+        .sort((a, b) => b.isSelected - a.isSelected);
 
       this.setState({
         items: refreshedItems, showContainer: true, filter: '',
