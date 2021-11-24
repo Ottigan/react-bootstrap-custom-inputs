@@ -68,10 +68,10 @@ class Autocomplete extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { name: prevName } = prevProps;
-    const { name: currName } = this.props;
+    const { name: prevName, list: prevList } = prevProps;
+    const { name: currName, list: currList } = this.props;
 
-    if (prevName !== currName) {
+    if ((prevName !== currName) || (prevList.length !== currList.length)) {
       this.initialize();
     }
   }
@@ -290,7 +290,7 @@ class Autocomplete extends Component {
           ref={inputRef}
           onChange={this.handleChange}
           value={filter}
-          className={`autocomplete-filter form-control mb-2 ${getValidity(isValid)}`}
+          className={`autocomplete-filter form-control ${getValidity(isValid)}`}
           type="text"
           name="filter"
           autoComplete={autoComplete}
