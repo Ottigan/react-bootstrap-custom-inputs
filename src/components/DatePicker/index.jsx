@@ -74,36 +74,33 @@ class DatePicker extends Component {
     const { inputRef, trackableDates } = this.state;
     const { multiselect, onChange } = this.props;
     const { name, checked } = e.target;
-
     if (multiselect) {
       const updatedTrackable = {
         ...trackableDates,
         [name]: checked,
       };
 
-      const dates = multiselect
-        ? Object.keys(updatedTrackable)
-          .reduce((acc, key) => {
-            if (updatedTrackable[key]) {
-              return [...acc, key];
-            }
+      const dates = Object.keys(updatedTrackable)
+        .reduce((acc, key) => {
+          if (updatedTrackable[key]) {
+            return [...acc, key];
+          }
 
-            return acc;
-          }, [])
-          .sort((a, b) => {
-            if (moment(a).isAfter(b)) return 1;
+          return acc;
+        }, [])
+        .sort((a, b) => {
+          if (moment(a).isAfter(b)) return 1;
 
-            if (moment(a).isSame(b)) return 0;
+          if (moment(a).isSame(b)) return 0;
 
-            return -1;
-          })
-          .map((x) => moment(x).format('DD.MM.YYYY'))
-          .join(', ')
-        : name;
+          return -1;
+        })
+        .map((x) => moment(x).format('DD.MM.YYYY'))
+        .join(', ');
 
-      const value = multiselect
+      const value = dates
         ? dates.split(', ').map((date) => moment(date, 'DD.MM.YYYY').format('YYYY-MM-DD'))
-        : moment(dates, 'DD.MM.YYYY').format('YYYY-MM-DD');
+        : [];
 
       this.setState({
         dates,
@@ -161,9 +158,15 @@ class DatePicker extends Component {
       const { dates } = this.state;
       const { multiselect } = this.props;
 
-      const value = multiselect
-        ? dates.split(', ').map((date) => moment(date, 'DD.MM.YYYY').format('YYYY-MM-DD'))
-        : moment(dates, 'DD.MM.YYYY').format('YYYY-MM-DD');
+      const value = (() => {
+        if (multiselect) {
+          return dates
+            ? dates.split(', ').map((date) => moment(date, 'DD.MM.YYYY').format('YYYY-MM-DD'))
+            : [];
+        }
+
+        return moment(dates, 'DD.MM.YYYY').format('YYYY-MM-DD');
+      })();
 
       this.setState({ showContainer: false }, () => onChange({ target: { name, value } }));
     }
