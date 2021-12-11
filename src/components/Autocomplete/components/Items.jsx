@@ -4,8 +4,9 @@ const propTypes = {
   show: PropTypes.bool.isRequired,
   items: PropTypes.arrayOf(PropTypes.shape({
     key: PropTypes.string.isRequired,
-    title: PropTypes.string,
     value: PropTypes.string.isRequired,
+    title: PropTypes.string,
+    children: PropTypes.arrayOf(PropTypes.shape()),
     isSelected: PropTypes.bool.isRequired,
   })).isRequired,
   handler: PropTypes.func.isRequired,
@@ -37,7 +38,7 @@ const Items = function (props) {
               onClick={handler}
               type="button"
               value={currentKey}
-              title={title}
+              title={title || value}
               className={`w-100 autocomplete-item text-start text-truncate list-group-item ${someChildren ? 'parent' : ''} ${isSelected ? 'selected' : ''}`}
               style={{ paddingLeft }}
             >

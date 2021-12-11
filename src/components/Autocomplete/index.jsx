@@ -3,24 +3,28 @@ import PropTypes from 'prop-types';
 import Items from './components/Items';
 import './styles.scss';
 
+const DEFAULT_ITEM_RENDER_COUNT = 50;
+
 const propTypes = {
   onChange: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
   list: PropTypes.arrayOf(PropTypes.shape({
     key: PropTypes.string.isRequired,
-    title: PropTypes.string,
     value: PropTypes.string.isRequired,
+    title: PropTypes.string,
+    children: PropTypes.arrayOf(PropTypes.shape()),
   })).isRequired,
+  label: PropTypes.string,
   value: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.arrayOf(PropTypes.string),
   ]),
-  label: PropTypes.string,
   className: PropTypes.string,
   autoComplete: PropTypes.string,
   multiselect: PropTypes.bool,
   required: PropTypes.bool,
   disabled: PropTypes.bool,
+  valid: PropTypes.bool,
   disableDeselect: PropTypes.bool,
 };
 
@@ -32,10 +36,27 @@ const defaultProps = {
   multiselect: false,
   required: false,
   disabled: false,
+  valid: null,
   disableDeselect: false,
 };
 
 class Autocomplete extends Component {
+  static valueComparer(a, b) {
+    return a.value.localeCompare(b.value);
+  }
+
+  static isSelectedComparer(a, b) {
+    return b.isSelected - a.isSelected;
+  }
+
+  static isVisibleComparer(a, b) {
+    if (a.isVisible === b.isVisible) return 0;
+
+    if (a.isVisible) return -1;
+
+    return 1;
+  }
+
   static extractSelected(items = []) {
     return items.flatMap((item) => {
       const { children, isSelected } = item;
@@ -51,7 +72,9 @@ class Autocomplete extends Component {
 
     this.state = {
       inputRef: createRef(),
+      containerRef: createRef(),
       items: [],
+      renderedItems: DEFAULT_ITEM_RENDER_COUNT,
       filter: '',
       showContainer: false,
       isValid: false,
@@ -68,10 +91,17 @@ class Autocomplete extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { name: prevName, list: prevList } = prevProps;
-    const { name: currName, list: currList } = this.props;
+    const {
+      value: prevValue, name: prevName, list: prevList, valid: prevValid,
+    } = prevProps;
+    const {
+      value: currValue, name: currName, list: currList, valid: currValid,
+    } = this.props;
 
-    if ((prevName !== currName) || (prevList.length !== currList.length)) {
+    if (prevValue !== currValue
+      || prevName !== currName
+      || prevList.length !== currList.length
+      || prevValid !== currValid) {
       this.initialize();
     }
   }
@@ -94,17 +124,22 @@ class Autocomplete extends Component {
     if (name === 'filter' && !showContainer) {
       const refreshedItems = items
         .map((item) => ({ ...item, isVisible: true }))
-        .sort((a, b) => b.isSelected - a.isSelected);
+        .sort(Autocomplete.valueComparer)
+        .sort(Autocomplete.isSelectedComparer);
 
       this.setState({
-        items: refreshedItems, showContainer: true, filter: '',
+        items: refreshedItems,
+        showContainer: true,
+        filter: '',
       });
     }
   }
 
   handleBlur(e) {
     const { inputRef, items } = this.state;
-    const { onChange, name, multiselect } = this.props;
+    const {
+      onChange, name, multiselect, valid,
+    } = this.props;
     const validClasses = ['autocomplete-item-container', 'autocomplete-item'];
     const { relatedTarget } = e;
     const isItem = relatedTarget
@@ -115,8 +150,9 @@ class Autocomplete extends Component {
       inputRef.current.focus();
     } else {
       const selectedItems = Autocomplete.extractSelected(items);
-      const value = multiselect ? selectedItems.map((item) => item.key) : selectedItems?.[0]?.key;
-      const isValid = !!value.length;
+      const isValid = valid === null ? !!selectedItems.length : valid;
+      const selectedKeys = selectedItems.map((item) => item.key);
+      const value = multiselect ? selectedKeys : selectedKeys?.[0];
 
       this.setState({ showContainer: false, isValid }, () => {
         this.renderSelectedPreview();
@@ -189,6 +225,18 @@ class Autocomplete extends Component {
     }
   }
 
+  handleScrollView() {
+    const { containerRef } = this.state;
+    const { scrollTop } = containerRef.current;
+
+    const sliceSize = DEFAULT_ITEM_RENDER_COUNT;
+    const scrollIncrement = (sliceSize / 1.25) * 41;
+    const slices = Math.ceil(scrollTop / scrollIncrement) || 1;
+    const renderedItems = slices * sliceSize;
+
+    this.setState({ renderedItems });
+  }
+
   filterItems() {
     const { items, filter } = this.state;
 
@@ -206,24 +254,23 @@ class Autocomplete extends Component {
         if (children) updatedItem.children = updatedChildren;
 
         return updatedItem;
-      });
+      })
+        .sort(Autocomplete.valueComparer)
+        .sort(Autocomplete.isVisibleComparer)
+        .sort(Autocomplete.isSelectedComparer);
     }
 
     const updatedItems = updateVisible(items);
 
-    this.setState({ items: updatedItems });
+    this.setState({ items: updatedItems }, this.handleScrollView);
   }
 
   initialize() {
-    const { value, list } = this.props;
+    const { value, list, valid } = this.props;
 
     function formatItems(items = []) {
       return items.reduce((acc, item) => {
         const { children } = item;
-
-        const hasChildren = children && children.length;
-        const formattedChildren = formatItems(children);
-        const childrenItems = formattedChildren;
 
         const isSelected = Array.isArray(value)
           ? value.some((key) => key === item.key)
@@ -237,7 +284,14 @@ class Autocomplete extends Component {
 
         delete updatedItem.children;
 
-        if (hasChildren) updatedItem.children = childrenItems;
+        const hasChildren = children && children.length;
+
+        if (hasChildren) {
+          const formattedChildren = formatItems(children);
+          const childrenItems = formattedChildren;
+
+          updatedItem.children = childrenItems;
+        }
 
         return [...acc, updatedItem];
       }, []);
@@ -245,9 +299,12 @@ class Autocomplete extends Component {
 
     const items = formatItems(list);
 
-    items.sort((a, b) => a.value.localeCompare(b.value));
+    items
+      .sort(Autocomplete.valueComparer);
 
-    const isValid = !!value.length;
+    const isValid = valid === null
+      ? (Array.isArray(value) || typeof value === 'string') && !!value.length
+      : valid;
 
     this.setState({ items, isValid }, this.renderSelectedPreview);
   }
@@ -265,7 +322,7 @@ class Autocomplete extends Component {
 
   render() {
     const {
-      inputRef, filter, items, showContainer, isValid,
+      inputRef, containerRef, filter, items, renderedItems, showContainer, isValid,
     } = this.state;
     const {
       autoComplete, label, className, required, disabled,
@@ -285,19 +342,35 @@ class Autocomplete extends Component {
         onBlur={this.handleBlur}
         className={`autocomplete-component position-relative ${className}`}
       >
-        <label className="d-block">{label}</label>
-        <input
-          ref={inputRef}
-          onChange={this.handleChange}
-          value={filter}
-          className={`autocomplete-filter form-control ${getValidity(isValid)}`}
-          type="text"
-          name="filter"
-          autoComplete={autoComplete}
-          disabled={disabled}
-        />
-        <ul tabIndex="-1" type="compact" className={`autocomplete-item-container ${showContainer ? 'show' : ''} position-absolute list-group list-group-flush overflow-auto rounded-start`}>
-          <Items show={showContainer} items={items} handler={this.handleSelect} />
+        <label className="d-block">
+          {label}
+          <input
+            ref={inputRef}
+            onChange={this.handleChange}
+            value={filter}
+            className={`autocomplete-filter form-control ${getValidity(isValid)}`}
+            type="text"
+            name="filter"
+            autoComplete={autoComplete}
+            disabled={disabled}
+          />
+        </label>
+        <ul
+          ref={containerRef}
+          onScroll={this.handleScrollView}
+          tabIndex="-1"
+          type="compact"
+          className={`autocomplete-item-container ${
+            showContainer
+              ? 'show'
+              : ''
+          } position-absolute list-group list-group-flush overflow-auto rounded-start`}
+        >
+          <Items
+            show={showContainer}
+            items={items.slice(0, renderedItems)}
+            handler={this.handleSelect}
+          />
         </ul>
       </div>
     );
