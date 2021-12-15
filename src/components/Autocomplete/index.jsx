@@ -42,7 +42,13 @@ const defaultProps = {
 
 class Autocomplete extends Component {
   static valueComparer(a, b) {
-    return a.value.localeCompare(b.value);
+    if (typeof a.value === 'string' && typeof b.value === 'string') {
+      return (
+        a.value.localeCompare(b.value)
+      );
+    }
+
+    return a.value - b.value;
   }
 
   static isSelectedComparer(a, b) {
@@ -256,8 +262,7 @@ class Autocomplete extends Component {
         return updatedItem;
       })
         .sort(Autocomplete.valueComparer)
-        .sort(Autocomplete.isVisibleComparer)
-        .sort(Autocomplete.isSelectedComparer);
+        .sort(Autocomplete.isVisibleComparer);
     }
 
     const updatedItems = updateVisible(items);
