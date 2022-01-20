@@ -5,6 +5,7 @@ import { uuidv4 } from '../../helpers/idGenerators';
 import './styles.scss';
 
 const WEEK_LENGTH = 7;
+const DATE_DOT_FORMAT = 'DD.MM.YYYY';
 
 const propTypes = {
   onChange: PropTypes.func.isRequired,
@@ -25,7 +26,7 @@ const propTypes = {
 
 const defaultProps = {
   label: '',
-  value: moment(),
+  value: null,
   multiselect: false,
   className: '',
   required: false,
@@ -41,7 +42,7 @@ class DatePicker extends Component {
       inputRef: createRef(),
       currentPeriod: moment(),
       formattedCurrentPeriod: '',
-      dates: moment().format('DD.MM.YYYY'),
+      dates: DATE_DOT_FORMAT,
       trackableDates: {},
       currentMonth: [],
       showContainer: false,
@@ -70,10 +71,30 @@ class DatePicker extends Component {
     }
   }
 
+  handleChange() {
+    const { onChange, name, multiselect } = this.props;
+    const { dates } = this.state;
+
+    const value = (() => {
+      if (multiselect) {
+        return dates && dates !== DATE_DOT_FORMAT
+          ? dates.split(', ').map((date) => moment(date, DATE_DOT_FORMAT).format('YYYY-MM-DD'))
+          : [];
+      }
+
+      return dates === DATE_DOT_FORMAT
+        ? null
+        : moment(dates, DATE_DOT_FORMAT).format('YYYY-MM-DD');
+    })();
+
+    onChange({ target: { name, value } });
+  }
+
   handleChecked(e) {
-    const { inputRef, trackableDates } = this.state;
-    const { multiselect, onChange } = this.props;
+    const { trackableDates } = this.state;
+    const { multiselect } = this.props;
     const { name, checked } = e.target;
+
     if (multiselect) {
       const updatedTrackable = {
         ...trackableDates,
@@ -95,19 +116,15 @@ class DatePicker extends Component {
 
           return -1;
         })
-        .map((x) => moment(x).format('DD.MM.YYYY'))
-        .join(', ');
-
-      const value = dates
-        ? dates.split(', ').map((date) => moment(date, 'DD.MM.YYYY').format('YYYY-MM-DD'))
-        : [];
+        .map((x) => moment(x).format(DATE_DOT_FORMAT))
+        .join(', ') || DATE_DOT_FORMAT;
 
       this.setState({
         dates,
         trackableDates: updatedTrackable,
-      }, () => onChange({ target: { name: 'dates', value } }));
+      }, this.handleChange);
     } else {
-      const date = moment(name).format('DD.MM.YYYY');
+      const date = moment(name).format(DATE_DOT_FORMAT);
 
       Object.keys(trackableDates).forEach((key) => {
         if (key === name) {
@@ -120,9 +137,9 @@ class DatePicker extends Component {
       this.setState({
         dates: date,
         trackableDates,
+        showContainer: false,
       }, () => {
-        this.updateIsValid();
-        inputRef.current.blur();
+        this.handleChange();
       });
     }
   }
@@ -138,7 +155,6 @@ class DatePicker extends Component {
   }
 
   handleBlur(e) {
-    const { onChange, name } = this.props;
     const { inputRef } = this.state;
     const validClasses = [
       'date-picker-container',
@@ -155,20 +171,7 @@ class DatePicker extends Component {
     if (isItem) {
       inputRef.current.focus();
     } else {
-      const { dates } = this.state;
-      const { multiselect } = this.props;
-
-      const value = (() => {
-        if (multiselect) {
-          return dates
-            ? dates.split(', ').map((date) => moment(date, 'DD.MM.YYYY').format('YYYY-MM-DD'))
-            : [];
-        }
-
-        return moment(dates, 'DD.MM.YYYY').format('YYYY-MM-DD');
-      })();
-
-      this.setState({ showContainer: false }, () => onChange({ target: { name, value } }));
+      this.setState({ showContainer: false }, this.handleChange);
     }
   }
 
@@ -189,7 +192,9 @@ class DatePicker extends Component {
   updateCurrentMonth(initial) {
     const { currentPeriod, trackableDates, dates } = this.state;
 
-    const initialDates = dates.split(' ').map((date) => moment(date, 'DD.MM.YYYY').format('YYYY-MM-DD'));
+    const initialDates = dates === DATE_DOT_FORMAT
+      ? []
+      : dates.split(' ').map((date) => moment(date, DATE_DOT_FORMAT).format('YYYY-MM-DD'));
     const lastInitialDate = initialDates[initialDates.length - 1];
     const endOfLastMonth = moment(lastInitialDate).endOf('month');
 
@@ -266,40 +271,29 @@ class DatePicker extends Component {
   initialize() {
     const { value } = this.props;
 
-    function fallbackMoment(data) {
-      return moment(data).isValid() ? moment(data) : moment();
+    if (value && value?.length) {
+      const currentPeriod = Array.isArray(value) ? value[0] : value;
+      const dates = Array.isArray(value)
+        ? value.map((date) => moment(date).format(DATE_DOT_FORMAT)).join(', ')
+        : moment(value).format(DATE_DOT_FORMAT);
+
+      this.setState({
+        currentPeriod,
+        dates,
+      }, () => {
+        this.updateCurrentMonth(true);
+        this.updateIsValid();
+      });
+    } else {
+      const currentPeriod = moment();
+
+      this.setState({
+        currentPeriod,
+      }, () => {
+        this.updateCurrentMonth(true);
+        this.updateIsValid();
+      });
     }
-
-    const currentPeriod = (() => {
-      const isArray = Array.isArray(value);
-
-      return isArray ? fallbackMoment(value[0]) : fallbackMoment(value);
-    })();
-
-    const dates = (() => {
-      const isArray = Array.isArray(value);
-      const isValid = isArray
-        ? value.every((date) => moment(date).isValid())
-        : moment(value).isValid();
-
-      if (isArray && isValid) {
-        return value.map((date) => moment(date).format('DD.MM.YYYY')).join(', ');
-      }
-
-      if (isValid) {
-        return moment(value).format('DD.MM.YYYY');
-      }
-
-      return moment().format('DD.MM.YYYY');
-    })();
-
-    this.setState({
-      currentPeriod,
-      dates,
-    }, () => {
-      this.updateCurrentMonth(true);
-      this.updateIsValid();
-    });
   }
 
   render() {
@@ -332,15 +326,19 @@ class DatePicker extends Component {
 
     return (
       <div key={`date-picker-${name}`} onFocus={this.handleFocus} onBlur={this.handleBlur} className={`date-picker-component ${className}`}>
-        <label className="d-block">{label}</label>
-        <input
-          ref={inputRef}
-          value={dates}
-          className={`date-picker-input form-control mb-2 ${getValidity(isValid)}`}
-          type="text"
-          name="dates"
-          readOnly
-        />
+        <label className="d-block">
+          {label}
+          <input
+            ref={inputRef}
+            value={dates}
+            onClick={this.handleFocus}
+            className={`date-picker-input form-control mb-2 ${getValidity(isValid)}`}
+            type="text"
+            name="dates"
+            disabled={disabled}
+            readOnly
+          />
+        </label>
         {showContainer ? (
           <div className="date-picker-container">
             <table tabIndex="-1" className="date-picker-table table">

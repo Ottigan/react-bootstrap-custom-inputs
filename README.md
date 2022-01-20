@@ -54,7 +54,7 @@ export default App;
 | name | true | `string` representing State property | - |
 | list | true | `array` of `objects` with `key`(unique string), `value`(string), `title`(optional string), `children`(support for nested list of the same format) properties | - |
 | label | false | `string` to enable interaction with the input through it's label | - |
-| value | false | `string` or string[] matching `key` property of `list` objects | - |
+| value | false | `string` or `string[]` matching `key` property of `list` objects | - |
 | className | false | `string` consisting of classes to apply to the input| - |
 | autoComplete | false | 'on' or 'off' | 'off' |
 | multiselect | false | `bool` to enable the ability of selecting multiple items | false |
@@ -68,26 +68,26 @@ export default App;
 ### DatePicker Props:
 | Name | Required | Description | Default |
 | ---- | -------- | ----------- | ------- |
-| onChange | true | handler function | - |
-| name | true | string representing State property | - |
-| label | false | string | - |
-| value | false | string or string[] in RFC2822 or ISO format | moment() |
-| className | false | string | - |
-| multiselect | false | bool | false |
-| required | false | bool | false |
-| valid | false | bool | - |
-| disabled | false | bool | false |
+| onChange | true | handler `function` | - |
+| name | true | `string` representing State property | - |
+| label | false | `string` to enable interaction with the input through it's label | - |
+| value | false | `string` or `string[]` in RFC2822 or ISO format | moment() |
+| className | false | `string` consisting of classes to apply to the input| - |
+| multiselect | false | `bool` | false |
+| valid | false | `bool` | - |
+| required | false | `bool` | false |
+| disabled | false | `bool` | false |
 
 <p>&nbsp;</p>
 
 ### TimePicker Props:
 | Name | Required | Description | Default |
 | ---- | -------- | ----------- | ------- |
-| onChange | true | handler function | - |
-| name | true | string representing State property | - |
-| label | false | string | - |
-| value | false | string in RFC2822 or ISO format | '--:--' |
-| className | false | string | - |
-| required | false | bool | false |
-| valid | false | bool | - |
-| disabled | false | bool | false |
+| onChange | true | handler `function` | - |
+| name | true | `string` representing State property | - |
+| label | false | `string` to enable interaction with the input through it's label | - |
+| value | false | `string` in RFC2822 or ISO format | '--:--' |
+| className | false | `string` | - |
+| valid | false | `bool` | - |
+| required | false | `bool` | false |
+| disabled | false | `bool` | false |
