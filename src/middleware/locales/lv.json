@@ -1,0 +1,44 @@
+{
+  "translation": {
+    "components": {
+      "autocomplete": {
+        "components": {
+          "clearButton": {
+            "clear": "Notīrīt"
+          },
+          "masterSelect": {
+            "selectAll": "Izvēlēties visu"
+          },
+          "items": {
+            "404": "Nekas netika atrasts..."
+          }
+        },
+        "search": "Meklēt...",
+        "multiselect": "Izvēlēti {{count}}"
+      },
+      "datePicker": {
+        "previous": "Iepriekšējais",
+        "next": "Nākamais",
+        "monday": "Pr",
+        "tuesday": "Ot",
+        "wednesday": "Tr",
+        "thursday": "Ce",
+        "friday": "Pk",
+        "saturday": "Se",
+        "sunday": "Sv",
+        "january": "Janvāris",
+        "february": "Februāris",
+        "march": "Marts",
+        "april": "Aprīlis",
+        "may": "Maijs",
+        "june": "Jūnijs",
+        "july": "Jūlijs",
+        "august": "Augusts",
+        "september": "Septembris",
+        "october": "Oktobris",
+        "november": "Novembris",
+        "december": "Decembris"
+      }
+    }
+  }
+}

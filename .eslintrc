@@ -1,5 +1,6 @@
 {
   "env": {
+    "jest/globals": true,
     "browser": true,
     "es2021": true,
     "node": true
@@ -10,7 +11,7 @@
     "ecmaVersion": 12,
     "sourceType": "module"
   },
-  "plugins": ["react"],
+  "plugins": ["react", "jest"],
   "rules": {
     "indent": ["error", 2],
     "no-console": ["error", { "allow": ["warn", "error", "info", "log"] }],
@@ -23,6 +24,11 @@
     "no-plusplus": [2, { "allowForLoopAfterthoughts": true }],
     "no-mixed-operators": "off",
     "quote-props": ["error", "as-needed"],
-    "func-names": "off"
+    "func-names": "off",
+    "jest/no-disabled-tests": "warn",
+    "jest/no-focused-tests": "error",
+    "jest/no-identical-title": "error",
+    "jest/prefer-to-have-length": "warn",
+    "jest/valid-expect": "error"
   }
 }

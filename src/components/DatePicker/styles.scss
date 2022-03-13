@@ -1,14 +1,11 @@
 $box-shadow-color: hsla(0, 0%, 50%, 0.2);
 $valid-bg-color: hsl(150, 47%, 78%);
 $valid-color: hsl(152, 69%, 19%);
+$today-bg-color: hsl(219, 70%, 90%);
+$today-color: hsl(219, 46%, 20%);
 
 .date-picker-component {
   position: relative;
-
-  .angle-arrow {
-    height: 1em;
-    vertical-align: -0.125em;
-  }
 
   .date-picker-container {
     position: absolute;
@@ -71,6 +68,11 @@ $valid-color: hsl(152, 69%, 19%);
           text-align: center;
           vertical-align: middle;
           border-width: 0px 0px 1px 1px;
+
+          &.today {
+            color: $today-color;
+            background-color: $today-bg-color;
+          }
 
           &.checked {
             color: $valid-color;

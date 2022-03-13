@@ -11,6 +11,7 @@ $is-valid-border-color: hsl(152, 69%, 31%);
 $is-valid-box-shadow-color: hsla(152, 69%, 31%, 0.25);
 $is-invalid-border-color: hsl(354, 70%, 54%);
 $is-invalid-box-shadow-color: hsla(354, 70%, 54%, 0.25);
+$disabled-bg-color: hsl(210, 16%, 93%);
 
 .time-picker-component {
   position: relative;
@@ -24,31 +25,38 @@ $is-invalid-box-shadow-color: hsla(354, 70%, 54%, 0.25);
   }
 
   .time-picker-input-dummy {
-    user-select: none;
-
-    &.focus {
-      background-color: $container-bg-color;
-      border-color: $focused-border-color;
-      box-shadow: 0 0 0 0.25rem $focused-box-shadow-color;
-
-      &.is-valid {
-        border-color: $is-valid-border-color;
-        box-shadow: 0 0 0 0.25rem $is-valid-box-shadow-color;
-      }
-
-      &.is-invalid {
-        border-color: $is-invalid-border-color;
-        box-shadow: 0 0 0 0.25rem $is-invalid-box-shadow-color;
+    &.disabled {
+      .time-picker-hours,
+      .time-picker-minutes {
+        cursor: default;
       }
     }
 
-    .time-picker-hours,
-    .time-picker-minutes {
-      padding: 1px 1px 2px 1px;
+    &:not(.disabled) {
+      &.focus {
+        background-color: $container-bg-color;
+        border-color: $focused-border-color;
+        box-shadow: 0 0 0 0.25rem $focused-box-shadow-color;
 
-      &.highlighted {
-        color: $highlighted-color;
-        background-color: $highlighted-bg-color;
+        &.is-valid {
+          border-color: $is-valid-border-color;
+          box-shadow: 0 0 0 0.25rem $is-valid-box-shadow-color;
+        }
+
+        &.is-invalid {
+          border-color: $is-invalid-border-color;
+          box-shadow: 0 0 0 0.25rem $is-invalid-box-shadow-color;
+        }
+      }
+
+      .time-picker-hours,
+      .time-picker-minutes {
+        padding: 1px 1px 2px 1px;
+
+        &.highlighted {
+          color: $highlighted-color;
+          background-color: $highlighted-bg-color;
+        }
       }
     }
   }

@@ -117,8 +117,8 @@ const propTypes = {
 };
 
 const defaultProps = {
-  value: '--:--',
   label: '',
+  value: '--:--',
   className: '',
   required: false,
   valid: null,
@@ -161,33 +161,45 @@ class TimePicker extends Component {
     this.initialize();
   }
 
+  componentDidUpdate(prevProps) {
+    const { valid: prevValid } = prevProps;
+    const { valid: currValid } = this.props;
+
+    if (prevValid !== currValid) {
+      this.updateIsValid();
+    }
+  }
+
   handleClick(e) {
     const {
       inputRef, inputDummyRef, hoursRef, minutesRef,
     } = this.state;
+    const { disabled } = this.props;
     const { target } = e;
 
-    if (!target.classList.contains('highlighted')) {
-      let caretPosition = 0;
+    if (!disabled) {
+      if (!target.classList.contains('highlighted')) {
+        let caretPosition = 0;
 
-      if (target.classList.contains('time-picker-minutes')) {
-        caretPosition = 3;
-      }
-
-      this.setState({ caretPosition }, () => {
-        inputRef.current.focus();
-        inputRef.current.selectionStart = caretPosition;
-        inputRef.current.selectionEnd = caretPosition;
-        inputDummyRef.current.classList.add('focus');
-
-        if (target.classList.contains('time-picker-hours') || target.classList.contains('time-picker-input-dummy')) {
-          hoursRef.current.classList.add('highlighted');
-          minutesRef.current.classList.remove('highlighted');
-        } else if (target.classList.contains('time-picker-minutes')) {
-          minutesRef.current.classList.add('highlighted');
-          hoursRef.current.classList.remove('highlighted');
+        if (target.classList.contains('time-picker-minutes')) {
+          caretPosition = 3;
         }
-      });
+
+        this.setState({ caretPosition }, () => {
+          inputRef.current.focus();
+          inputRef.current.selectionStart = caretPosition;
+          inputRef.current.selectionEnd = caretPosition;
+          inputDummyRef.current.classList.add('focus');
+
+          if (target.classList.contains('time-picker-hours') || target.classList.contains('time-picker-input-dummy')) {
+            hoursRef.current.classList.add('highlighted');
+            minutesRef.current.classList.remove('highlighted');
+          } else if (target.classList.contains('time-picker-minutes')) {
+            minutesRef.current.classList.add('highlighted');
+            hoursRef.current.classList.remove('highlighted');
+          }
+        });
+      }
     }
   }
 
@@ -376,11 +388,11 @@ class TimePicker extends Component {
   updateIsValid(updateDummyFocus = false) {
     const { required, valid } = this.props;
     const { time, inputDummyRef } = this.state;
-    const [hour, minute] = time.split(':');
-    const isValid = moment(hour, 'HH').isValid() && moment(minute, 'mm').isValid();
 
     if (required) {
       if (valid === null) {
+        const isValid = moment(time, 'HH:mm').isValid();
+
         this.setState({ isValid }, () => {
           if (updateDummyFocus) inputDummyRef.current.classList.add('focus');
         });
@@ -395,9 +407,9 @@ class TimePicker extends Component {
   initialize() {
     const { value } = this.props;
 
-    const isValid = moment(value).isValid();
+    const isValid = moment(value, 'HH:mm').isValid();
     const time = isValid
-      ? moment(value).format('HH:mm')
+      ? value
       : '--:--';
 
     const [hour, minute] = time.split(':');
@@ -407,7 +419,9 @@ class TimePicker extends Component {
 
     this.setState({
       time,
+      hour,
       hours,
+      minute,
       minutes,
     }, this.updateIsValid);
   }
@@ -437,7 +451,7 @@ class TimePicker extends Component {
     } = this.props;
 
     function getValidity(validity) {
-      if (disabled) return '';
+      if (disabled) return 'disabled';
 
       if (validity === null) return 'bg-white';
 
@@ -451,7 +465,7 @@ class TimePicker extends Component {
         key={`time-picker-${name}`}
         onFocus={this.handleFocus}
         onBlur={this.handleBlur}
-        className={`time-picker-component ${className}`}
+        className={`time-picker-component col-3 ${className}`}
       >
         <label className="d-block">{label}</label>
         <div className="position-relative">
@@ -460,7 +474,7 @@ class TimePicker extends Component {
             onChange={this.handleChange}
             onKeyDown={this.handleKeyDown}
             value={time}
-            className={`time-picker-input form-control mb-2 ${getValidity(isValid)}`}
+            className={`time-picker-input form-control ${getValidity(isValid)}`}
             type="text"
             name="time"
           />
@@ -468,7 +482,8 @@ class TimePicker extends Component {
             ref={inputDummyRef}
             onClick={this.handleClick}
             type="button"
-            className={`time-picker-input-dummy form-control mb-2 ${getValidity(isValid)}`}
+            className={`time-picker-input-dummy form-control ${getValidity(isValid)}`}
+            disabled={disabled}
           >
             <span ref={hoursRef} onClick={this.handleClick} tabIndex="-1" role="button" className="time-picker-hours">{time.split(':')[0]}</span>
             :

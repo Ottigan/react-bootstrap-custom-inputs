@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
+import { withTranslation } from 'react-i18next';
 
 const propTypes = {
+  t: PropTypes.func.isRequired,
   show: PropTypes.bool.isRequired,
   items: PropTypes.arrayOf(PropTypes.shape({
     key: PropTypes.string.isRequired,
@@ -14,7 +16,7 @@ const propTypes = {
 
 const Items = function (props) {
   const {
-    show, items, handler,
+    t, show, items, handler,
   } = props;
 
   function renderItems(x, prevKey = null, paddingLeft = 15) {
@@ -22,7 +24,7 @@ const Items = function (props) {
 
     return x.map((item) => {
       const {
-        key, title, value, children, isSelected, isVisible,
+        key, title, value, children, isSelected, isVisible, isImportant,
       } = item;
 
       if (children) {
@@ -43,6 +45,9 @@ const Items = function (props) {
               style={{ paddingLeft }}
             >
               {value}
+              {isImportant
+                ? <i className="ps-3 fa fa-star" />
+                : null}
             </button>
             {children
               ? <ul>{renderItems(children, currentKey, paddingLeft + 15)}</ul>
@@ -60,8 +65,8 @@ const Items = function (props) {
   if (show) {
     if (!items.length) {
       return (
-        <li className="autocomplete-item text-center list-group-item">
-          No data...
+        <li className="autocomplete-item text-center fw-normal list-group-item">
+          {t('components.autocomplete.components.items.404')}
         </li>
       );
     }
@@ -74,4 +79,4 @@ const Items = function (props) {
 
 Items.propTypes = propTypes;
 
-export default Items;
+export default withTranslation()(Items);

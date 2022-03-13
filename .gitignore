@@ -5,8 +5,9 @@
 /.pnp
 .pnp.js
 
-# testing
+#testing
 /coverage
+/__mocks__
 
 # production
 /dist

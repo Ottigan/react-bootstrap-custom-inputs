@@ -3,9 +3,25 @@ $valid-bg-color: hsl(150, 47%, 78%);
 $valid-color: hsl(152, 69%, 19%);
 
 .autocomplete-component {
+  .autocomplete-label {
+    position: relative;
+
+    .btn-fa {
+      position: absolute;
+      bottom: 5px;
+      right: 5px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 28px;
+      width: 28px;
+    }
+  }
+
   .autocomplete-item-container {
     max-height: 0px;
-    width: 100%;
+    width: 99%;
+    margin-top: 10px;
     z-index: 1;
     background-color: white;
     transition: all 0.1s ease-in;
@@ -22,12 +38,17 @@ $valid-color: hsl(152, 69%, 19%);
     }
 
     li {
+      i.fa {
+        pointer-events: none;
+      }
+
       ul {
         padding-left: 0;
         list-style: none;
       }
 
       button {
+        height: 41px;
         border-bottom: 0;
 
         &.parent {

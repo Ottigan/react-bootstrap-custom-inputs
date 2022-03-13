@@ -1,5 +1,6 @@
 import { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
+import { withTranslation } from 'react-i18next';
 import moment from 'moment';
 import { uuidv4 } from '../../helpers/idGenerators';
 import './styles.scss';
@@ -8,8 +9,10 @@ const WEEK_LENGTH = 7;
 const DATE_DOT_FORMAT = 'DD.MM.YYYY';
 
 const propTypes = {
+  t: PropTypes.func.isRequired,
+    i18n: PropTypes.shape().isRequired,
   onChange: PropTypes.func.isRequired,
-  label: PropTypes.string,
+  label: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   value: PropTypes.oneOfType([
     PropTypes.string,
@@ -25,7 +28,6 @@ const propTypes = {
 };
 
 const defaultProps = {
-  label: '',
   value: null,
   multiselect: false,
   className: '',
@@ -57,6 +59,14 @@ class DatePicker extends Component {
   }
 
   componentDidMount() {
+    const {i18n} = this.props;
+
+    moment.updateLocale(i18n.language, {
+      week: {
+        dow: 1,
+      },
+    });
+
     this.initialize();
   }
 
@@ -243,9 +253,14 @@ class DatePicker extends Component {
         [[]],
       );
 
+    const { t } = this.props;
+
     const currentPeriodMonth = moment(currentPeriod).format('MMMM').toLowerCase();
+    
     const currentPeriodYear = moment(currentPeriod).format('YYYY');
-    const formattedCurrentPeriod = `${currentPeriodMonth[0].toUpperCase() + currentPeriodMonth.slice(1)}, ${currentPeriodYear}`;
+    const formattedCurrentPeriod = `${t(
+      `components.datePicker.${currentPeriodMonth}`,
+    )}, ${currentPeriodYear}`;
 
     this.setState({
       currentPeriod,
@@ -308,6 +323,7 @@ class DatePicker extends Component {
     } = this.state;
 
     const {
+      t,
       label,
       name,
       disabled,
@@ -326,19 +342,17 @@ class DatePicker extends Component {
 
     return (
       <div key={`date-picker-${name}`} onFocus={this.handleFocus} onBlur={this.handleBlur} className={`date-picker-component ${className}`}>
-        <label className="d-block">
-          {label}
-          <input
-            ref={inputRef}
-            value={dates}
-            onClick={this.handleFocus}
-            className={`date-picker-input form-control mb-2 ${getValidity(isValid)}`}
-            type="text"
-            name="dates"
-            disabled={disabled}
-            readOnly
-          />
-        </label>
+        <label className="d-block">{label}</label>
+        <input
+          ref={inputRef}
+          value={dates}
+          onClick={this.handleFocus}
+          className={`date-picker-input form-control ${getValidity(isValid)}`}
+          type="text"
+          name="dates"
+          disabled={disabled}
+          readOnly
+        />
         {showContainer ? (
           <div className="date-picker-container">
             <table tabIndex="-1" className="date-picker-table table">
@@ -347,11 +361,11 @@ class DatePicker extends Component {
                   <th colSpan="1">
                     <button
                       onClick={this.handlePrev}
-                      title="Previous"
+                      title={t('components.datePicker.previous')}
                       className="date-picker-prev btn btn-dark"
                       type="button"
                     >
-                      <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-left" className="angle-arrow" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><path fill="currentColor" d="M192 448c-8.188 0-16.38-3.125-22.62-9.375l-160-160c-12.5-12.5-12.5-32.75 0-45.25l160-160c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25L77.25 256l137.4 137.4c12.5 12.5 12.5 32.75 0 45.25C208.4 444.9 200.2 448 192 448z" /></svg>
+                      <i className="fa fa-angle-left" />
                     </button>
                   </th>
                   <th colSpan="5" className="text-center">
@@ -360,22 +374,22 @@ class DatePicker extends Component {
                   <th colSpan="1">
                     <button
                       onClick={this.handleNext}
-                      title="Next"
+                      title={t('components.datePicker.next')}
                       className="date-picker-next btn btn-dark"
                       type="button"
                     >
-                      <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-right" className="angle-arrow" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><path fill="currentColor" d="M64 448c-8.188 0-16.38-3.125-22.62-9.375c-12.5-12.5-12.5-32.75 0-45.25L178.8 256L41.38 118.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0l160 160c12.5 12.5 12.5 32.75 0 45.25l-160 160C80.38 444.9 72.19 448 64 448z" /></svg>
+                      <i className="fa fa-angle-right" />
                     </button>
                   </th>
                 </tr>
                 <tr>
-                  <th className="date-picker-heading">Mon</th>
-                  <th className="date-picker-heading">Tue</th>
-                  <th className="date-picker-heading">Wed</th>
-                  <th className="date-picker-heading">Thu</th>
-                  <th className="date-picker-heading">Fri</th>
-                  <th className="date-picker-heading">Sat</th>
-                  <th className="date-picker-heading">Sun</th>
+                  <th className="date-picker-heading">{t('components.datePicker.monday')}</th>
+                  <th className="date-picker-heading">{t('components.datePicker.tuesday')}</th>
+                  <th className="date-picker-heading">{t('components.datePicker.wednesday')}</th>
+                  <th className="date-picker-heading">{t('components.datePicker.thursday')}</th>
+                  <th className="date-picker-heading">{t('components.datePicker.friday')}</th>
+                  <th className="date-picker-heading">{t('components.datePicker.saturday')}</th>
+                  <th className="date-picker-heading">{t('components.datePicker.sunday')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -383,12 +397,23 @@ class DatePicker extends Component {
                   const trKey = `week${JSON.stringify(week)}`;
                   const formattedWeek = week.map((day) => {
                     const tdKey = day ? `day${day}` : uuidv4();
+
                     if (day) {
                       const longDay = day.format('YYYY-MM-DD');
                       const checked = trackableDates[longDay];
                       const shortDay = day.format('D');
+                      const isToday = day.isSame(moment().startOf('day'));
+
+                      const tdClassName = (() => {
+                        if (checked) return 'checked';
+
+                        if (isToday) return 'today';
+
+                        return '';
+                      })();
+
                       return (
-                        <td key={shortDay} className={`${checked ? 'checked' : ''}`}>
+                        <td key={shortDay} className={tdClassName}>
                           {shortDay}
                           <input
                             onChange={this.handleChecked}
@@ -396,11 +421,11 @@ class DatePicker extends Component {
                             name={longDay}
                             className="date-picker-checkbox form-check-input"
                             type="checkbox"
-                            id="flexCheckDefault"
                           />
                         </td>
                       );
                     }
+
                     return <td key={tdKey} className="bg-white pe-auto" />;
                   });
                   return <tr key={trKey}>{formattedWeek}</tr>;
@@ -417,4 +442,4 @@ class DatePicker extends Component {
 DatePicker.propTypes = propTypes;
 DatePicker.defaultProps = defaultProps;
 
-export default DatePicker;
+export default withTranslation()(DatePicker);

@@ -3,6 +3,7 @@ import { Component } from 'react';
 import Autocomplete from './components/Autocomplete';
 import DatePicker from './components/DatePicker';
 import TimePicker from './components/TimePicker';
+// import { Autocomplete, DatePicker, TimePicker } from '../dist';
 
 class App extends Component {
   constructor(props) {

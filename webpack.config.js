@@ -25,15 +25,7 @@ const config = {
       {
         test: /\.(js|jsx)$/,
         exclude: /(dist|node_modules|bower_components)/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: [
-              ['@babel/preset-env', { useBuiltIns: 'usage', corejs: 3 }],
-              ['@babel/preset-react', { runtime: 'automatic' }],
-            ],
-          },
-        },
+        use: { loader: 'babel-loader' },
       },
       {
         test: /\.(sa|sc|c)ss$/,
