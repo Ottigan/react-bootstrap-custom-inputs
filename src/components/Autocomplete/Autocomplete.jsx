@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
@@ -11,6 +10,7 @@ const DEFAULT_ITEM_RENDER_COUNT = 50;
 
 const propTypes = {
   t: PropTypes.func.isRequired,
+  i18n: PropTypes.shape().isRequired,
   onChange: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
   list: PropTypes.arrayOf(PropTypes.shape({
@@ -26,6 +26,7 @@ const propTypes = {
     PropTypes.arrayOf(PropTypes.string),
   ]),
   className: PropTypes.string,
+  language: PropTypes.string,
   autoComplete: PropTypes.string,
   multiselect: PropTypes.bool,
   required: PropTypes.bool,
@@ -38,6 +39,7 @@ const defaultProps = {
   label: '',
   value: '',
   className: '',
+  language: '',
   autoComplete: 'off',
   multiselect: false,
   required: false,
@@ -144,16 +146,27 @@ class Autocomplete extends Component {
 
   componentDidUpdate(prevProps) {
     const {
-      value: prevValue, name: prevName, list: prevList, valid: prevValid,
+      value: prevValue,
+      name: prevName,
+      list: prevList,
+      valid: prevValid,
+      language: prevLanguage,
     } = prevProps;
+
     const {
-      value: currValue, name: currName, list: currList, valid: currValid,
+      value: currValue,
+      name: currName,
+      list: currList,
+      valid: currValid,
+      language: currLanguage,
     } = this.props;
 
     if (prevValue !== currValue
       || prevName !== currName
       || prevList.length !== currList.length
-      || prevValid !== currValid) {
+      || prevValid !== currValid
+      || prevLanguage !== currLanguage
+    ) {
       this.initialize();
     }
   }
@@ -342,7 +355,11 @@ class Autocomplete extends Component {
   }
 
   initialize() {
-    const { value, list, valid } = this.props;
+    const {
+      value, list, valid, i18n, language,
+    } = this.props;
+    i18n.changeLanguage(language);
+
     let areAllSelected = true;
 
     function formatItems(items = []) {

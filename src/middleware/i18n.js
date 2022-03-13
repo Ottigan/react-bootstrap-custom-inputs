@@ -11,6 +11,7 @@ i18next
       lv,
     },
     lng: 'en',
+    fallbackLng: 'en',
     react: { useSuspense: false },
   });
 

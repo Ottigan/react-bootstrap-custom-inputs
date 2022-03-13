@@ -50,6 +50,7 @@ class App extends Component {
             name="select"
             label="Select"
             className="col-3"
+            language="lv"
           />
           <DatePicker
             onChange={this.handleChange}
@@ -58,6 +59,7 @@ class App extends Component {
             label="Dates"
             multiselect
             className="col-3"
+            language="lv"
           />
           <TimePicker
             onChange={this.handleChange}

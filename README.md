@@ -56,6 +56,7 @@ export default App;
 | label | false | `string` to enable interaction with the input through it's label | - |
 | value | false | `string` or `string[]` matching `key` property of `list` objects | - |
 | className | false | `string` consisting of classes to apply to the input| - |
+| language | false | `string` currently supported values [`en`, `lv`] | 'en' |
 | autoComplete | false | 'on' or 'off' | 'off' |
 | multiselect | false | `bool` to enable the ability of selecting multiple items | false |
 | valid | false | `bool` to override default `required` with your own definition (i.e. `valid === true` when at least 3 items are selected) | - |
@@ -73,6 +74,7 @@ export default App;
 | label | false | `string` to enable interaction with the input through it's label | - |
 | value | false | `string` or `string[]` in RFC2822 or ISO format | moment() |
 | className | false | `string` consisting of classes to apply to the input| - |
+| language | false | `string` currently supported values [`en`, `lv`] | 'en' |
 | multiselect | false | `bool` | false |
 | valid | false | `bool` | - |
 | required | false | `bool` | false |

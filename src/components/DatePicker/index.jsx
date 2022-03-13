@@ -10,7 +10,7 @@ const DATE_DOT_FORMAT = 'DD.MM.YYYY';
 
 const propTypes = {
   t: PropTypes.func.isRequired,
-    i18n: PropTypes.shape().isRequired,
+  i18n: PropTypes.shape().isRequired,
   onChange: PropTypes.func.isRequired,
   label: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
@@ -21,6 +21,7 @@ const propTypes = {
     PropTypes.instanceOf(moment),
   ]),
   className: PropTypes.string,
+  language: PropTypes.string,
   multiselect: PropTypes.bool,
   required: PropTypes.bool,
   valid: PropTypes.bool,
@@ -31,6 +32,7 @@ const defaultProps = {
   value: null,
   multiselect: false,
   className: '',
+  language: '',
   required: false,
   valid: null,
   disabled: false,
@@ -59,22 +61,14 @@ class DatePicker extends Component {
   }
 
   componentDidMount() {
-    const {i18n} = this.props;
-
-    moment.updateLocale(i18n.language, {
-      week: {
-        dow: 1,
-      },
-    });
-
     this.initialize();
   }
 
   componentDidUpdate(prevProps) {
-    const { valid: prevValid, name: prevName } = prevProps;
-    const { valid: currValid, name: currName } = this.props;
+    const { valid: prevValid, name: prevName, language: prevLanguage } = prevProps;
+    const { valid: currValid, name: currName, language: currLanguage } = this.props;
 
-    if (prevName !== currName) {
+    if (prevName !== currName || prevLanguage !== currLanguage) {
       this.initialize();
     } else if (prevValid !== currValid) {
       this.updateIsValid();
@@ -256,7 +250,7 @@ class DatePicker extends Component {
     const { t } = this.props;
 
     const currentPeriodMonth = moment(currentPeriod).format('MMMM').toLowerCase();
-    
+
     const currentPeriodYear = moment(currentPeriod).format('YYYY');
     const formattedCurrentPeriod = `${t(
       `components.datePicker.${currentPeriodMonth}`,
@@ -284,7 +278,9 @@ class DatePicker extends Component {
   }
 
   initialize() {
-    const { value } = this.props;
+    const { value, i18n, language } = this.props;
+    i18n.changeLanguage(language);
+    moment.updateLocale('en', { week: { dow: 1 } });
 
     if (value && value?.length) {
       const currentPeriod = Array.isArray(value) ? value[0] : value;

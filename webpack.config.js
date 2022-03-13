@@ -49,6 +49,8 @@ if (currentTask === 'dev') {
     'prop-types': 'prop-types',
     bootstrap: 'bootstrap',
     moment: 'moment',
+    i18next: 'i18next',
+    'react-i18next': 'react-i18next',
   };
   config.plugins.push(new CleanWebpackPlugin());
 }
