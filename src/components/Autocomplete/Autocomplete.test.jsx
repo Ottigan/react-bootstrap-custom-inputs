@@ -1,3 +1,4 @@
+import '../../middleware/i18nDev';
 import { render, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import userEvent from '@testing-library/user-event';
@@ -46,6 +47,7 @@ describe('Autocomplete', () => {
       name="test"
       label="test"
     />);
+
     expect(getComputedStyle(screen.getByTestId('clearButton')).visibility).toMatch('hidden');
 
     rerender(<Autocomplete
@@ -55,6 +57,7 @@ describe('Autocomplete', () => {
       name="test"
       label="test"
     />);
+
     expect(getComputedStyle(screen.getByTestId('clearButton')).visibility).toMatch('visible');
   });
 
