@@ -1,20 +1,16 @@
 import i18next from 'i18next';
-import { initReactI18next } from 'react-i18next';
 import en from './locales/en.json';
 import lv from './locales/lv.json';
 
-i18next
-  .use(initReactI18next)
-  .init({
-    resources: {
-      en,
-      lv,
-    },
-    lng: 'en',
-    fallbackLng: 'en',
-    react: { useSuspense: false },
-  });
+const i18n = i18next.createInstance();
 
-i18next.services.formatter.add('capitalize', (v) => v[0].toUpperCase() + v.slice(1));
+i18n.init({
+  resources: { en, lv },
+  lng: 'en',
+  fallbackLng: 'en',
+  ns: ['reactBootstrapCustomInputs'],
+  defaultNS: 'reactBootstrapCustomInputs',
+  react: { useSuspense: false },
+});
 
-export default i18next;
+export default i18n;

@@ -1,6 +1,6 @@
 {
   "name": "react-bootstrap-custom-inputs",
-  "version": "1.4.0",
+  "version": "1.4.6",
   "description": "React compatible inputs adhering to Bootstrap theme.",
   "keywords": [
     "react",
@@ -40,6 +40,7 @@
     "moment": "^2.29.1",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
+    "react-bootstrap-custom-inputs": "^1.4.5",
     "react-dom": "^17.0.2",
     "react-i18next": "^11.15.6"
   },
@@ -51,6 +52,7 @@
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.4",
     "@testing-library/user-event": "^13.5.0",
+    "babel-eslint": "^10.1.0",
     "babel-loader": "^8.2.3",
     "clean-webpack-plugin": "^4.0.0",
     "core-js": "^3.19.1",

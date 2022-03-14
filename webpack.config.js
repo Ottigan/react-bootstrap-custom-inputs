@@ -44,8 +44,6 @@ if (currentTask === 'dev') {
   config.output.library = 'react-bootstrap-custom-inputs';
   config.output.libraryTarget = 'umd';
   config.externals = {
-    react: 'react',
-    'react-dom': 'react-dom',
     'prop-types': 'prop-types',
     bootstrap: 'bootstrap',
     moment: 'moment',

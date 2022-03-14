@@ -1,9 +1,15 @@
-import moment from 'moment';
 import { Component } from 'react';
+import PropTypes from 'prop-types';
+import { withTranslation } from 'react-i18next';
+import moment from 'moment';
 import Autocomplete from './components/Autocomplete';
 import DatePicker from './components/DatePicker';
 import TimePicker from './components/TimePicker';
 // import { Autocomplete, DatePicker, TimePicker } from '../dist';
+
+const propTypes = {
+  t: PropTypes.func.isRequired,
+};
 
 class App extends Component {
   constructor(props) {
@@ -29,6 +35,7 @@ class App extends Component {
 
   render() {
     const { dates, select, time } = this.state;
+    const { t } = this.props;
 
     return (
       <div className="container-fluid vh-100">
@@ -48,7 +55,7 @@ class App extends Component {
               },
             ]}
             name="select"
-            label="Select"
+            label={t('global.list')}
             className="col-3"
             language="lv"
           />
@@ -74,4 +81,6 @@ class App extends Component {
   }
 }
 
-export default App;
+App.propTypes = propTypes;
+
+export default withTranslation()(App);

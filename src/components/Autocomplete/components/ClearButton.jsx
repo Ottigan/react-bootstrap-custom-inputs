@@ -2,11 +2,11 @@ import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 
 const propTypes = {
+  t: PropTypes.func.isRequired,
   handler: PropTypes.func.isRequired,
   multiselect: PropTypes.bool.isRequired,
   items: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   disableDeselect: PropTypes.bool.isRequired,
-  t: PropTypes.func.isRequired,
 };
 
 const ClearButton = function (props) {
