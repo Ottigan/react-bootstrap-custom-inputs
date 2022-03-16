@@ -5,7 +5,7 @@ import moment from 'moment';
 import Autocomplete from './components/Autocomplete';
 import DatePicker from './components/DatePicker';
 import TimePicker from './components/TimePicker';
-// import { Autocomplete, DatePicker, TimePicker } from '../dist';
+// import { Autocomplete, DatePicker, TimePicker } from 'react-bootstrap-custom-inputs';
 
 const propTypes = {
   t: PropTypes.func.isRequired,

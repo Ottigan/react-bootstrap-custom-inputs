@@ -476,6 +476,7 @@ class Autocomplete extends Component {
           <ClearButton
             handler={this.handleClear}
             multiselect={multiselect}
+            disabled={disabled}
             items={items}
             disableDeselect={disableDeselect}
           />

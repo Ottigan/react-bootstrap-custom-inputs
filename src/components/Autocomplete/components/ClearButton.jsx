@@ -6,6 +6,7 @@ const propTypes = {
   handler: PropTypes.func.isRequired,
   multiselect: PropTypes.bool.isRequired,
   items: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+  disabled: PropTypes.bool.isRequired,
   disableDeselect: PropTypes.bool.isRequired,
 };
 
@@ -15,6 +16,7 @@ const ClearButton = function (props) {
     items,
     handler,
     multiselect,
+    disabled,
     disableDeselect,
   } = props;
 
@@ -31,7 +33,7 @@ const ClearButton = function (props) {
   }
 
   // Returning null caused click event to pass to the element below, this avoids it...
-  const visibility = isSomeSelected(items) && (multiselect || !disableDeselect)
+  const visibility = isSomeSelected(items) && (multiselect || !disableDeselect) && !disabled
     ? 'visible'
     : 'hidden';
 
