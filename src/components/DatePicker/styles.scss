@@ -9,6 +9,7 @@ $today-color: hsl(219, 46%, 20%);
 
   .date-picker-container {
     position: absolute;
+    margin-top: 10px;
     z-index: 1;
     max-height: 0px;
     transition: all 0.1s ease-in;

@@ -1,3 +1,5 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
@@ -361,7 +363,7 @@ class DatePicker extends Component {
                       className="date-picker-prev btn btn-dark"
                       type="button"
                     >
-                      <i className="fa fa-angle-left" />
+                      <FontAwesomeIcon icon={faAngleLeft} />
                     </button>
                   </th>
                   <th colSpan="5" className="text-center">
@@ -374,7 +376,7 @@ class DatePicker extends Component {
                       className="date-picker-next btn btn-dark"
                       type="button"
                     >
-                      <i className="fa fa-angle-right" />
+                      <FontAwesomeIcon icon={faAngleRight} />
                     </button>
                   </th>
                 </tr>

@@ -1,3 +1,5 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStar } from '@fortawesome/free-solid-svg-icons';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 
@@ -46,7 +48,7 @@ const Items = function (props) {
             >
               {value}
               {isImportant
-                ? <i className="ps-3 fa fa-star" />
+                ? <FontAwesomeIcon icon={faStar} />
                 : null}
             </button>
             {children

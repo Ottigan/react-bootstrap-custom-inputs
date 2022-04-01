@@ -37,6 +37,7 @@ const config = {
 
 if (currentTask === 'dev') {
   config.plugins.push(new HtmlWebpackPlugin({ template: './src/index.html' }));
+  config.devtool = 'inline-source-map';
 } else if (currentTask === 'build') {
   config.mode = 'production';
   config.entry = './src/main.jsx';

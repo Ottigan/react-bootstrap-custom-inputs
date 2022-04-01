@@ -65,6 +65,7 @@ $disabled-bg-color: hsl(210, 16%, 93%);
     position: absolute;
     z-index: 1;
     max-height: 0px;
+    margin-top: 10px;
     background-color: $container-bg-color;
     transition: all 0.1s ease-in;
 
@@ -78,7 +79,10 @@ $disabled-bg-color: hsl(210, 16%, 93%);
       height: 300px;
       padding: 0;
       border: 1px solid $border-color;
-      scrollbar-width: none;
+
+      @supports (scrollbar-width: none) {
+        scrollbar-width: none;
+      }
 
       &::-webkit-scrollbar {
         display: none;
