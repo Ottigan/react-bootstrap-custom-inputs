@@ -1,11 +1,10 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
-import moment from 'moment';
 import Autocomplete from './components/Autocomplete';
 import DatePicker from './components/DatePicker';
 import TimePicker from './components/TimePicker';
-// import { Autocomplete, DatePicker, TimePicker } from 'react-bootstrap-custom-inputs';
+// import { Autocomplete, DatePicker, TimePicker } from '../dist';
 
 const propTypes = {
   t: PropTypes.func.isRequired,
@@ -18,7 +17,7 @@ class App extends Component {
     this.state = {
       dates: '',
       select: 'test2',
-      time: moment().format(),
+      time: '2022-04-03T10:00',
     };
 
     this.handleChange = this.handleChange.bind(this);

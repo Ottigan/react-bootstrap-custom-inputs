@@ -407,9 +407,9 @@ class TimePicker extends Component {
   initialize() {
     const { value } = this.props;
 
-    const isValid = moment(value, 'HH:mm').isValid();
+    const isValid = moment(value).isValid();
     const time = isValid
-      ? value
+      ? moment(value).format('HH:mm')
       : '--:--';
 
     const [hour, minute] = time.split(':');
