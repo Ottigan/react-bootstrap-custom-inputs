@@ -67,10 +67,14 @@ class DatePicker extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { valid: prevValid, name: prevName, language: prevLanguage } = prevProps;
-    const { valid: currValid, name: currName, language: currLanguage } = this.props;
+    const {
+      value: prevValue, valid: prevValid, name: prevName, language: prevLanguage,
+    } = prevProps;
+    const {
+      value: currValue, valid: currValid, name: currName, language: currLanguage,
+    } = this.props;
 
-    if (prevName !== currName || prevLanguage !== currLanguage) {
+    if (prevValue !== currValue || prevName !== currName || prevLanguage !== currLanguage) {
       this.initialize();
     } else if (prevValid !== currValid) {
       this.updateIsValid();
@@ -97,7 +101,7 @@ class DatePicker extends Component {
   }
 
   handleChecked(e) {
-    const { trackableDates } = this.state;
+    const { inputRef, trackableDates } = this.state;
     const { multiselect } = this.props;
     const { name, checked } = e.target;
 
@@ -144,9 +148,7 @@ class DatePicker extends Component {
         dates: date,
         trackableDates,
         showContainer: false,
-      }, () => {
-        this.handleChange();
-      });
+      }, () => inputRef.current.blur());
     }
   }
 
@@ -252,7 +254,6 @@ class DatePicker extends Component {
     const { t } = this.props;
 
     const currentPeriodMonth = moment(currentPeriod).format('MMMM').toLowerCase();
-
     const currentPeriodYear = moment(currentPeriod).format('YYYY');
     const formattedCurrentPeriod = `${t(
       `components.datePicker.${currentPeriodMonth}`,
