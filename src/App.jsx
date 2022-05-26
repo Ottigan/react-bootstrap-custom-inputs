@@ -38,7 +38,7 @@ class App extends Component {
 
     return (
       <div className="container-fluid vh-100">
-        <div className="row justify-content-center align-items-center h-100">
+        <form className="row justify-content-center align-items-center h-100">
           <Autocomplete
             onChange={this.handleChange}
             value={select}
@@ -73,8 +73,10 @@ class App extends Component {
             name="time"
             label="Time"
             className="col-2"
+            // valid
+            // required
           />
-        </div>
+        </form>
       </div>
     );
   }

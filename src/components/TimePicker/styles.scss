@@ -19,7 +19,7 @@ $disabled-bg-color: hsl(210, 16%, 93%);
   .time-picker-input {
     position: absolute;
     cursor: default;
-    top: 0;
+    bottom: 0;
     left: 0;
     z-index: -1;
   }
@@ -33,22 +33,6 @@ $disabled-bg-color: hsl(210, 16%, 93%);
     }
 
     &:not(.disabled) {
-      &.focus {
-        background-color: $container-bg-color;
-        border-color: $focused-border-color;
-        box-shadow: 0 0 0 0.25rem $focused-box-shadow-color;
-
-        &.is-valid {
-          border-color: $is-valid-border-color;
-          box-shadow: 0 0 0 0.25rem $is-valid-box-shadow-color;
-        }
-
-        &.is-invalid {
-          border-color: $is-invalid-border-color;
-          box-shadow: 0 0 0 0.25rem $is-invalid-box-shadow-color;
-        }
-      }
-
       .time-picker-hours,
       .time-picker-minutes {
         padding: 1px 1px 2px 1px;
@@ -71,12 +55,12 @@ $disabled-bg-color: hsl(210, 16%, 93%);
 
     &.show {
       min-height: 40px;
-      max-height: 300px;
+      max-height: 287px;
       box-shadow: -10px 7px 10px $container-box-shadow-color, 10px 7px 10px $container-box-shadow-color;
     }
 
     ul {
-      height: 300px;
+      height: 287px;
       padding: 0;
       border: 1px solid $border-color;
 

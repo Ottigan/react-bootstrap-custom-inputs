@@ -341,17 +341,19 @@ class DatePicker extends Component {
 
     return (
       <div key={`date-picker-${name}`} onFocus={this.handleFocus} onBlur={this.handleBlur} className={`date-picker-component ${className}`}>
-        <label className="d-block">{label}</label>
-        <input
-          ref={inputRef}
-          value={dates}
-          onClick={this.handleFocus}
-          className={`date-picker-input form-control ${getValidity(isValid)}`}
-          type="text"
-          name="dates"
-          disabled={disabled}
-          readOnly
-        />
+        <label className="d-block">
+          {label}
+          <input
+            ref={inputRef}
+            value={dates}
+            onClick={this.handleFocus}
+            className={`date-picker-input form-control ${getValidity(isValid)}`}
+            type="text"
+            name="dates"
+            disabled={disabled}
+            readOnly
+          />
+        </label>
         {showContainer ? (
           <div className="date-picker-container">
             <table tabIndex="-1" className="date-picker-table table">

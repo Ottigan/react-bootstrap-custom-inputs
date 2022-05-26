@@ -181,12 +181,16 @@ class TimePicker extends Component {
       if (!target.classList.contains('highlighted')) {
         let caretPosition = 0;
 
+        if (target.classList.contains('time-picker-hours')) {
+          inputRef.current.focus();
+        }
+
         if (target.classList.contains('time-picker-minutes')) {
+          inputRef.current.focus();
           caretPosition = 3;
         }
 
         this.setState({ caretPosition }, () => {
-          inputRef.current.focus();
           inputRef.current.selectionStart = caretPosition;
           inputRef.current.selectionEnd = caretPosition;
           inputDummyRef.current.classList.add('focus');
@@ -205,13 +209,14 @@ class TimePicker extends Component {
 
   handleFocus(e) {
     const {
-      showContainer, hoursScrollRef, minutesScrollRef,
+      showContainer, inputDummyRef, hoursScrollRef, minutesScrollRef,
     } = this.state;
     const { disabled } = this.props;
     const { name } = e.target;
 
-    if (name === 'time' && !showContainer && !disabled) {
+    if (['time', 'dummy'].includes(name) && !showContainer && !disabled) {
       this.setState({ showContainer: true }, () => {
+        inputDummyRef.current.classList.add('focus');
         hoursScrollRef.current.scrollTop = HOURS_DEFAULT_SCROLL_TOP;
         minutesScrollRef.current.scrollTop = MINUTES_DEFAULT_SCROLL_TOP;
       });
@@ -467,8 +472,8 @@ class TimePicker extends Component {
         onBlur={this.handleBlur}
         className={`time-picker-component col-3 ${className}`}
       >
-        <label className="d-block">{label}</label>
-        <div className="position-relative">
+        <label className="d-block position-relative">
+          {label}
           <input
             ref={inputRef}
             onChange={this.handleChange}
@@ -482,6 +487,7 @@ class TimePicker extends Component {
             ref={inputDummyRef}
             onClick={this.handleClick}
             type="button"
+            name="dummy"
             className={`time-picker-input-dummy form-control ${getValidity(isValid)}`}
             disabled={disabled}
           >
@@ -489,7 +495,7 @@ class TimePicker extends Component {
             :
             <span ref={minutesRef} onClick={this.handleClick} tabIndex="-1" role="button" className="time-picker-minutes">{time.split(':')[1]}</span>
           </button>
-        </div>
+        </label>
         {showContainer ? (
           <div className="time-picker-container d-flex show">
             <Hours
