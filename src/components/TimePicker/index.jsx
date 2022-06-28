@@ -177,35 +177,33 @@ class TimePicker extends Component {
     const { disabled } = this.props;
     const { target } = e;
 
-    if (!disabled) {
-      if (!target.classList.contains('highlighted')) {
-        let caretPosition = 0;
+    if (!disabled && !target.classList.contains('highlighted')) {
+      let caretPosition = 0;
 
-        if (target.classList.contains('time-picker-minutes')) {
-          caretPosition = 3;
-        }
-
-        this.setState({ caretPosition }, () => {
-          inputRef.current.focus();
-          inputRef.current.selectionStart = caretPosition;
-          inputRef.current.selectionEnd = caretPosition;
-          inputDummyRef.current.classList.add('focus');
-
-          if (target.classList.contains('time-picker-hours') || target.classList.contains('time-picker-input-dummy')) {
-            hoursRef.current.classList.add('highlighted');
-            minutesRef.current.classList.remove('highlighted');
-          } else if (target.classList.contains('time-picker-minutes')) {
-            minutesRef.current.classList.add('highlighted');
-            hoursRef.current.classList.remove('highlighted');
-          }
-        });
+      if (target.classList.contains('time-picker-minutes')) {
+        caretPosition = 3;
       }
+
+      this.setState({ caretPosition }, () => {
+        inputRef.current.focus();
+        inputRef.current.selectionStart = caretPosition;
+        inputRef.current.selectionEnd = caretPosition;
+        inputDummyRef.current.classList.add('focus');
+
+        if (target.classList.contains('time-picker-hours') || target.classList.contains('time-picker-input-dummy')) {
+          hoursRef.current.classList.add('highlighted');
+          minutesRef.current.classList.remove('highlighted');
+        } else if (target.classList.contains('time-picker-minutes')) {
+          minutesRef.current.classList.add('highlighted');
+          hoursRef.current.classList.remove('highlighted');
+        }
+      });
     }
   }
 
   handleFocus(e) {
     const {
-      showContainer, inputDummyRef, hoursScrollRef, minutesScrollRef,
+      showContainer, inputDummyRef, hoursRef, hoursScrollRef, minutesScrollRef,
     } = this.state;
     const { disabled } = this.props;
     const { name } = e.target;
@@ -213,6 +211,7 @@ class TimePicker extends Component {
     if (['time', 'dummy'].includes(name) && !showContainer && !disabled) {
       this.setState({ showContainer: true }, () => {
         inputDummyRef.current.classList.add('focus');
+        hoursRef.current.classList.add('highlighted');
         hoursScrollRef.current.scrollTop = HOURS_DEFAULT_SCROLL_TOP;
         minutesScrollRef.current.scrollTop = MINUTES_DEFAULT_SCROLL_TOP;
       });
@@ -408,7 +407,7 @@ class TimePicker extends Component {
   initialize() {
     const { value } = this.props;
 
-    const isValid = moment(value, 'HH:mm').isValid();
+    const isValid = moment(value, 'HH:mm').isValid() && value.length === 5;
     const time = isValid
       ? value
       : '--:--';
@@ -463,9 +462,13 @@ class TimePicker extends Component {
 
     return (
       <div
+        tabIndex="-1"
         key={`time-picker-${name}`}
         onFocus={this.handleFocus}
         onBlur={this.handleBlur}
+        onClick={this.handleClick}
+        onKeyDown={this.handleKeyDown}
+        role="button"
         className={`time-picker-component col-3 ${className}`}
       >
         <label className="d-block position-relative">
@@ -479,18 +482,16 @@ class TimePicker extends Component {
             type="text"
             name="time"
           />
-          <button
+          <div
             ref={inputDummyRef}
-            onClick={this.handleClick}
-            type="button"
             name="dummy"
             className={`time-picker-input-dummy form-control ${getValidity(isValid)}`}
             disabled={disabled}
           >
             <span ref={hoursRef} onClick={this.handleClick} tabIndex="-1" role="button" className="time-picker-hours">{time.split(':')[0]}</span>
-            :
+            <span>:</span>
             <span ref={minutesRef} onClick={this.handleClick} tabIndex="-1" role="button" className="time-picker-minutes">{time.split(':')[1]}</span>
-          </button>
+          </div>
         </label>
         {showContainer ? (
           <div className="time-picker-container d-flex show">

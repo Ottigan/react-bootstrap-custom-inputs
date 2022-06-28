@@ -17,7 +17,7 @@ class App extends Component {
     this.state = {
       dates: '',
       select: 'test2',
-      time: '2022-04-03T10:00',
+      time: '10:00',
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -75,6 +75,13 @@ class App extends Component {
             className="col-2"
             // valid
             // required
+          />
+          <TimePicker
+            onChange={this.handleChange}
+            value={time}
+            name="time"
+            label="Time"
+            className="col-2"
           />
         </form>
       </div>

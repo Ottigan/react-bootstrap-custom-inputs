@@ -12,7 +12,7 @@ const config = {
     path: path.resolve(__dirname, 'dist'),
   },
   devServer: {
-    port: 3000,
+    port: 4000,
     static: path.resolve(__dirname, 'dist'),
     hot: true,
     open: true,

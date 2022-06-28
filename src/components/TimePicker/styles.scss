@@ -22,9 +22,28 @@ $disabled-bg-color: hsl(210, 16%, 93%);
     bottom: 0;
     left: 0;
     z-index: -1;
+
+    &:not(.is-valid):not(.is-invalid):focus + div {
+      border: 1px solid $focused-border-color;
+    }
+
+    &.is-valid:focus + div,
+    &.is-invalid:focus + div {
+      border-width: 1px;
+    }
   }
 
   .time-picker-input-dummy {
+    display: flex;
+    justify-content: center;
+    height: 38px;
+    line-height: 1;
+
+    span {
+      display: inline-flex;
+      align-items: center;
+    }
+
     &.disabled {
       .time-picker-hours,
       .time-picker-minutes {
@@ -35,7 +54,7 @@ $disabled-bg-color: hsl(210, 16%, 93%);
     &:not(.disabled) {
       .time-picker-hours,
       .time-picker-minutes {
-        padding: 1px 1px 2px 1px;
+        padding: 1px;
 
         &.highlighted {
           color: $highlighted-color;
