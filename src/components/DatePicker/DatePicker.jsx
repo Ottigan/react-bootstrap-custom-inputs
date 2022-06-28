@@ -31,7 +31,7 @@ const propTypes = {
 };
 
 const defaultProps = {
-  value: null,
+  value: '',
   multiselect: false,
   className: '',
   language: '',
@@ -288,9 +288,14 @@ class DatePicker extends Component {
     i18n.changeLanguage(language);
     moment.updateLocale('en', { week: { dow: 1 } });
 
-    if (value && value?.length) {
-      const currentPeriod = Array.isArray(value) ? value[0] : value;
-      const dates = Array.isArray(value)
+    const isArray = Array.isArray(value);
+    const isValid = isArray
+      ? value.some((date) => !moment(date).isValid())
+      : moment(value).isValid();
+
+    if (isValid) {
+      const currentPeriod = isArray ? value[0] : value;
+      const dates = isArray
         ? value.map((date) => moment(date).format(DATE_DOT_FORMAT)).join(', ')
         : moment(value).format(DATE_DOT_FORMAT);
 

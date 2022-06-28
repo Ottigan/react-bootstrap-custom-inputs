@@ -15,7 +15,7 @@ class App extends Component {
     super(props);
 
     this.state = {
-      dates: '',
+      dates: '2022-06-28',
       select: 'test2',
       time: '10:00',
     };
@@ -73,8 +73,6 @@ class App extends Component {
             name="time"
             label="Time"
             className="col-2"
-            // valid
-            // required
           />
           <TimePicker
             onChange={this.handleChange}
