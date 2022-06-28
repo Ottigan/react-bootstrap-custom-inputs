@@ -74,7 +74,10 @@ class DatePicker extends Component {
       value: currValue, valid: currValid, name: currName, language: currLanguage,
     } = this.props;
 
-    if (prevValue !== currValue || prevName !== currName || prevLanguage !== currLanguage) {
+    const isValueSame = prevValue.length === currValue.length
+    && JSON.stringify(prevValue) === JSON.stringify(currValue);
+
+    if (!isValueSame || prevName !== currName || prevLanguage !== currLanguage) {
       this.initialize();
     } else if (prevValid !== currValid) {
       this.updateIsValid();
