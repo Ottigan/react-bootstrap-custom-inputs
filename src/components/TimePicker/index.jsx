@@ -181,16 +181,12 @@ class TimePicker extends Component {
       if (!target.classList.contains('highlighted')) {
         let caretPosition = 0;
 
-        if (target.classList.contains('time-picker-hours')) {
-          inputRef.current.focus();
-        }
-
         if (target.classList.contains('time-picker-minutes')) {
-          inputRef.current.focus();
           caretPosition = 3;
         }
 
         this.setState({ caretPosition }, () => {
+          inputRef.current.focus();
           inputRef.current.selectionStart = caretPosition;
           inputRef.current.selectionEnd = caretPosition;
           inputDummyRef.current.classList.add('focus');
@@ -412,9 +408,9 @@ class TimePicker extends Component {
   initialize() {
     const { value } = this.props;
 
-    const isValid = moment(value).isValid();
+    const isValid = moment(value, 'HH:mm').isValid();
     const time = isValid
-      ? moment(value).format('HH:mm')
+      ? value
       : '--:--';
 
     const [hour, minute] = time.split(':');

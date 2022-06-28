@@ -88,7 +88,7 @@ export default App;
 | onChange | true | handler `function` | - |
 | name | true | `string` representing State property | - |
 | label | false | `string` to enable interaction with the input through it's label | - |
-| value | false | `string` in RFC2822 or ISO format | '--:--' |
+| value | false | `string` in the format `HH:mm` | '--:--' |
 | className | false | `string` | - |
 | valid | false | `bool` | - |
 | required | false | `bool` | false |
