@@ -297,6 +297,7 @@ class DatePicker extends Component {
       }, () => {
         this.updateCurrentMonth(true);
         this.updateIsValid();
+        this.handleChange();
       });
     } else {
       const currentPeriod = moment();
