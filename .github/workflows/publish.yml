@@ -1,4 +1,4 @@
-name: CI deploy to surge
+name: CI publish to npm
 
 on:
   workflow_run:
