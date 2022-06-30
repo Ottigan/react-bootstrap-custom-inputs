@@ -39,11 +39,15 @@ $disabled-bg-color: hsl(210, 16%, 93%);
     height: 38px;
     line-height: 1;
 
-    span {
+    .time-picker-hours,
+    .time-picker-seperator,
+    .time-picker-minutes {
       display: inline-flex;
       justify-content: center;
       align-items: center;
       outline: none;
+      border: none;
+      background-color: white;
       padding: 1px;
     }
 

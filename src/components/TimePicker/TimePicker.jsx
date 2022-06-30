@@ -145,6 +145,7 @@ class TimePicker extends Component {
       minutes: {},
       showContainer: false,
       isValid: null,
+      isClosing: false,
     };
 
     this.handleClick = this.handleClick.bind(this);
@@ -209,8 +210,13 @@ class TimePicker extends Component {
     if (['time', 'dummy', 'hours', 'minutes'].includes(name) && !showContainer && !disabled) {
       const isFocusOnMinutes = name === 'minutes';
 
-      this.setState({ showContainer: true, caretPosition: isFocusOnMinutes ? 3 : 0 }, () => {
+      this.setState({
+        showContainer: true,
+        caretPosition: isFocusOnMinutes ? 3 : 0,
+        isClosing: false,
+      }, () => {
         inputRef.current.focus();
+
         if (isFocusOnMinutes) {
           minutesRef.current.classList.add('highlighted');
         } else {
@@ -228,8 +234,8 @@ class TimePicker extends Component {
     } = this.state;
     const { key, shiftKey } = e;
 
-    const tabBackward = key === 'Tab' && shiftKey;
-    const tabForward = key === 'Tab' && !shiftKey;
+    const isBackwardTab = key === 'Tab' && shiftKey;
+    const isForwardTab = key === 'Tab' && !shiftKey;
 
     if (key === 'ArrowLeft') {
       hoursRef.current.classList.add('highlighted');
@@ -241,16 +247,17 @@ class TimePicker extends Component {
       hoursRef.current.classList.remove('highlighted');
 
       this.setState({ caretPosition: 3 });
-    } else if (tabBackward) {
+    } else if (isBackwardTab) {
       if (minutesRef.current.classList.contains('highlighted')) {
         hoursRef.current.classList.add('highlighted');
         minutesRef.current.classList.remove('highlighted');
 
         this.setState({ caretPosition: 0 });
       } else if (hoursRef.current.classList.contains('highlighted')) {
-        inputRef.current.blur();
+        // enables ability to close component
+        this.setState({ isClosing: true }, () => hoursRef.current.focus());
       }
-    } else if (tabForward) {
+    } else if (isForwardTab) {
       if (hoursRef.current.classList.contains('highlighted')) {
         hoursRef.current.classList.remove('highlighted');
         minutesRef.current.classList.add('highlighted');
@@ -382,22 +389,42 @@ class TimePicker extends Component {
 
   handleBlur(e) {
     const { onChange, name } = this.props;
-    const { inputRef, hoursRef, minutesRef } = this.state;
-    const validClasses = [
-      'time-picker-input',
+    const {
+      inputRef, hoursRef, minutesRef, isClosing,
+    } = this.state;
+    const timePickerInputClass = 'time-picker-input';
+    const timePickerHoursClass = 'time-picker-hours';
+    const timePickerMinutesClass = 'time-picker-minutes';
+
+    const interactiveClasses = [
+      timePickerInputClass,
+      timePickerHoursClass,
+      timePickerMinutesClass,
+    ];
+
+    const allClasses = [
+      ...interactiveClasses,
+      'time-picker-component',
       'time-picker-input-dummy',
-      'time-picker-hours',
-      'time-picker-minutes',
       'time-picker-container',
       'time-picker-checkbox',
     ];
 
     const { relatedTarget } = e;
-    const isItem = relatedTarget
-      ? validClasses.some((className) => relatedTarget.classList.contains(className))
+
+    const isInteractive = relatedTarget && interactiveClasses
+      .some((c) => relatedTarget.classList.contains(c));
+
+    const isFromSameInstance = isInteractive
+      ? [inputRef, hoursRef, minutesRef]
+        .some((ref) => ref.current === relatedTarget)
+      : true;
+
+    const shouldRefocus = relatedTarget && isFromSameInstance && !isClosing
+      ? allClasses.some((className) => relatedTarget.classList.contains(className))
       : false;
 
-    if (isItem) {
+    if (shouldRefocus) {
       inputRef.current.focus();
     } else {
       const { time: value } = this.state;
@@ -463,7 +490,6 @@ class TimePicker extends Component {
 
     const {
       label,
-      name,
       disabled,
       className,
     } = this.props;
@@ -481,7 +507,6 @@ class TimePicker extends Component {
     return (
       <div
         tabIndex="-1"
-        key={`time-picker-${name}`}
         onFocus={this.handleFocus}
         onBlur={this.handleBlur}
         onClick={this.handleClick}
@@ -495,9 +520,9 @@ class TimePicker extends Component {
             data-name="dummy"
             className={`time-picker-input-dummy form-control ${getValidity(isValid)}`}
           >
-            <span ref={hoursRef} role="button" data-name="hours" className="time-picker-hours">{time.split(':')[0]}</span>
-            <span>:</span>
-            <span ref={minutesRef} role="button" data-name="minutes" className="time-picker-minutes">{time.split(':')[1]}</span>
+            <button ref={hoursRef} type="button" data-name="hours" className="time-picker-hours">{time.split(':')[0]}</button>
+            <span className="time-picker-seperator">:</span>
+            <button ref={minutesRef} type="button" data-name="minutes" className="time-picker-minutes">{time.split(':')[1]}</button>
           </div>
           <input
             ref={inputRef}
