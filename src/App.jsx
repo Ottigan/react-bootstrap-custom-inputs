@@ -1,10 +1,10 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
-import Autocomplete from './components/Autocomplete';
-import DatePicker from './components/DatePicker';
-import TimePicker from './components/TimePicker';
-// import { Autocomplete, DatePicker, TimePicker } from '../dist';
+// import Autocomplete from './components/Autocomplete';
+// import DatePicker from './components/DatePicker';
+// import TimePicker from './components/TimePicker';
+import { Autocomplete, DatePicker, TimePicker } from '../dist';
 
 const propTypes = {
   t: PropTypes.func.isRequired,
