@@ -46,6 +46,7 @@ const ClearButton = function (props) {
       title={t('components.autocomplete.components.clearButton.clear')}
       className="autocomplete-reset-btn btn btn-danger btn-fa"
       style={{ visibility }}
+      tabIndex="-1"
       data-testid="clearButton"
     >
       <FontAwesomeIcon icon={faTimes} />

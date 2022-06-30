@@ -27,6 +27,7 @@ const propTypes = {
   ]),
   className: PropTypes.string,
   language: PropTypes.string,
+  debounce: PropTypes.number,
   autoComplete: PropTypes.string,
   multiselect: PropTypes.bool,
   required: PropTypes.bool,
@@ -40,6 +41,7 @@ const defaultProps = {
   value: '',
   className: '',
   language: '',
+  debounce: 500,
   autoComplete: 'off',
   multiselect: false,
   required: false,
@@ -101,6 +103,22 @@ class Autocomplete extends Component {
     });
   }
 
+  static getVisibleItemsCount(arr = []) {
+    return arr.reduce((acc, item) => {
+      const { children, isVisible } = item;
+
+      const countFromChildren = Array.isArray(children)
+        ? this.getVisibleItemsCount(children)
+        : 0;
+
+      const currentCount = isVisible
+        ? acc + 1 + countFromChildren
+        : acc + countFromChildren;
+
+      return currentCount;
+    }, 0);
+  }
+
   static updateItems(arr, isSelected) {
     return arr.map((item) => {
       const { children } = item;
@@ -127,12 +145,14 @@ class Autocomplete extends Component {
       areAllSelected: false,
       items: [],
       renderedItems: DEFAULT_ITEM_RENDER_COUNT,
+      visibleItemsCount: 0,
       filter: '',
+      filterTimeout: null,
       showContainer: false,
       isValid: false,
     };
 
-    this.handleChange = this.handleChange.bind(this);
+    this.handleFilter = this.handleFilter.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
     this.handleClear = this.handleClear.bind(this);
     this.handleFocus = this.handleFocus.bind(this);
@@ -171,12 +191,22 @@ class Autocomplete extends Component {
     }
   }
 
-  handleChange(e) {
+  // with debounce
+  handleFilter(e) {
+    const { debounce } = this.props;
+    const { filterTimeout } = this.state;
     const { name, value } = e.target;
+
+    clearTimeout(filterTimeout);
+
+    const newFilterTimeout = setTimeout(() => {
+      this.filterItems();
+    }, debounce);
 
     this.setState({
       [name]: value,
-    }, () => this.filterItems());
+      filterTimeout: newFilterTimeout,
+    });
   }
 
   handleSelect(e) {
@@ -202,7 +232,7 @@ class Autocomplete extends Component {
     }
 
     function updateSingleSelect(arr, keys) {
-      const selectedKey = keys[keys.length - 1];
+      const selectedKey = keys.at(-1);
 
       return arr.map((item) => {
         const { key, isSelected, children } = item;
@@ -289,6 +319,7 @@ class Autocomplete extends Component {
     if (isValid) {
       inputRef.current.focus();
     } else {
+      this.applyFilter();
       this.updateParent(false);
     }
   }
@@ -303,6 +334,41 @@ class Autocomplete extends Component {
     const renderedItems = slices * sliceSize;
 
     this.setState({ renderedItems });
+  }
+
+  // If a single item matches filter, select it
+  applyFilter() {
+    const { filter, items } = this.state;
+
+    function getVisibleItemsKeys(arr, parentKey = '') {
+      return arr.reduce((acc, item) => {
+        const { children, key, isVisible } = item;
+        const formattedKey = parentKey ? `${parentKey}.${key}` : key;
+
+        const keysFromChilldren = Array.isArray(children)
+          ? getVisibleItemsKeys(children, key)
+          : [];
+
+        const currentKeys = isVisible
+          ? [...acc, formattedKey, ...keysFromChilldren]
+          : [...acc, ...keysFromChilldren];
+
+        return currentKeys;
+      }, []);
+    }
+
+    const visibleItemKeys = filter.length && getVisibleItemsKeys(items);
+
+    if (visibleItemKeys.length === 1) {
+      const event = {
+        target: {
+          name: 'applyFilter',
+          value: visibleItemKeys[0],
+        },
+      };
+
+      this.handleSelect(event);
+    }
   }
 
   updateParent(showContainer) {
@@ -350,8 +416,9 @@ class Autocomplete extends Component {
     }
 
     const updatedItems = updateVisible(items);
+    const visibleItemsCount = Autocomplete.getVisibleItemsCount(updatedItems);
 
-    this.setState({ items: updatedItems }, this.handleScrollView);
+    this.setState({ items: updatedItems, visibleItemsCount }, this.handleScrollView);
   }
 
   initialize() {
@@ -394,6 +461,7 @@ class Autocomplete extends Component {
     }
 
     const items = formatItems(list);
+    const visibleItemsCount = Autocomplete.getVisibleItemsCount(items);
 
     items.sort(Autocomplete.valueComparer)
       .sort(Autocomplete.isImportantComparer)
@@ -404,7 +472,7 @@ class Autocomplete extends Component {
       : valid;
 
     this.setState({
-      items, isValid, areAllSelected,
+      items, visibleItemsCount, isValid, areAllSelected,
     }, this.renderSelectedPreview);
   }
 
@@ -432,6 +500,7 @@ class Autocomplete extends Component {
       areAllSelected,
       items,
       renderedItems,
+      visibleItemsCount,
       showContainer,
       isValid,
     } = this.state;
@@ -463,7 +532,7 @@ class Autocomplete extends Component {
           {label}
           <input
             ref={inputRef}
-            onChange={this.handleChange}
+            onChange={this.handleFilter}
             onBlur={this.handleBlur}
             value={filter}
             className={`autocomplete-filter form-control ${getValidity(isValid)}`}
@@ -502,6 +571,7 @@ class Autocomplete extends Component {
           <Items
             show={showContainer}
             items={items.slice(0, renderedItems)}
+            visibleItemsCount={visibleItemsCount}
             handler={this.handleSelect}
           />
         </ul>

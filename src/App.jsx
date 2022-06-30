@@ -74,13 +74,6 @@ class App extends Component {
             label="Time"
             className="col-2"
           />
-          <TimePicker
-            onChange={this.handleChange}
-            value={time}
-            name="time"
-            label="Time"
-            className="col-2"
-          />
         </form>
       </div>
     );

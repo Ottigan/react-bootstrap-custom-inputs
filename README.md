@@ -57,6 +57,7 @@ export default App;
 | value | false | `string` or `string[]` matching `key` property of `list` objects | - |
 | className | false | `string` consisting of classes to apply to the input| - |
 | language | false | `string` currently supported values [`en`, `lv`] | 'en' |
+| debounce | false | `number` representing debounce in milliseconds | 500ms |
 | autoComplete | false | 'on' or 'off' | 'off' |
 | multiselect | false | `bool` to enable the ability of selecting multiple items | false |
 | valid | false | `bool` to override default `required` with your own definition (i.e. `valid === true` when at least 3 items are selected) | - |

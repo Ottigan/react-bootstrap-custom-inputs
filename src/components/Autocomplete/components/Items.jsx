@@ -13,12 +13,13 @@ const propTypes = {
     children: PropTypes.arrayOf(PropTypes.shape()),
     isSelected: PropTypes.bool.isRequired,
   })).isRequired,
+  visibleItemsCount: PropTypes.number.isRequired,
   handler: PropTypes.func.isRequired,
 };
 
 const Items = function (props) {
   const {
-    t, show, items, handler,
+    t, show, items, visibleItemsCount, handler,
   } = props;
 
   function renderItems(x, prevKey = null, paddingLeft = 15) {
@@ -44,6 +45,7 @@ const Items = function (props) {
               value={currentKey}
               title={title || value}
               className={`w-100 autocomplete-item text-start text-truncate list-group-item ${someChildren ? 'parent' : ''} ${isSelected ? 'selected' : ''}`}
+              tabIndex="-1"
               style={{ paddingLeft }}
             >
               {value}
@@ -65,7 +67,7 @@ const Items = function (props) {
   }
 
   if (show) {
-    if (!items.length) {
+    if (visibleItemsCount === 0) {
       return (
         <li className="autocomplete-item text-center fw-normal list-group-item">
           {t('components.autocomplete.components.items.404')}
