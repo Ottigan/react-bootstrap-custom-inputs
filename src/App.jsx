@@ -15,7 +15,7 @@ class App extends Component {
     super(props);
 
     this.state = {
-      dates: '2022-06-28',
+      dates: '',
       select: 'test2',
       time: '10:00',
     };
@@ -63,7 +63,6 @@ class App extends Component {
             value={dates}
             name="dates"
             label="Dates"
-            multiselect
             className="col-3"
             language="lv"
           />

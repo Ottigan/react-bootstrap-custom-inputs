@@ -96,7 +96,7 @@ class DatePicker extends Component {
       }
 
       return dates === DATE_DOT_FORMAT
-        ? null
+        ? ''
         : moment(dates, DATE_DOT_FORMAT).format('YYYY-MM-DD');
     })();
 
