@@ -52,7 +52,7 @@ export default App;
 | ---- | -------- | ----------- | ------- |
 | onChange | true | handler `function` | - |
 | name | true | `string` representing State property | - |
-| list | true | `array` of `objects` with `key`(unique string), `value`(string), `title`(optional string), `children`(support for nested list of the same format) properties | - |
+| list | true | `array` of `objects` with `key`(unique string), `value`(string), `title`(optional string), `isImportant`(optional boolean) to display a star icon, `isBackground`(optional boolean) to hide on open, `children`(support for nested list of the same format) properties | - |
 | label | false | `string` to enable interaction with the input through it's label | - |
 | value | false | `string` or `string[]` matching `key` property of `list` objects | - |
 | className | false | `string` consisting of classes to apply to the input| - |

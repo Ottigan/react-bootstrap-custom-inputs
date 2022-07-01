@@ -47,6 +47,7 @@ class App extends Component {
                 key: 'test1',
                 value: 'test1',
                 isImportant: true,
+                isBackground: true,
               },
               {
                 key: 'test2',

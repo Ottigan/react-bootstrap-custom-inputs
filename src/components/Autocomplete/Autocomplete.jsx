@@ -17,7 +17,8 @@ const propTypes = {
     key: PropTypes.string.isRequired,
     value: PropTypes.string.isRequired,
     title: PropTypes.string,
-    children: PropTypes.arrayOf(PropTypes.shape()),
+    isImportant: PropTypes.bool,
+    isBackground: PropTypes.bool,
     sort: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   })).isRequired,
   label: PropTypes.string,
@@ -35,6 +36,8 @@ const propTypes = {
   valid: PropTypes.bool,
   disableDeselect: PropTypes.bool,
 };
+
+propTypes.list.children = PropTypes.arrayOf(PropTypes.shape());
 
 const defaultProps = {
   label: '',
@@ -293,7 +296,16 @@ class Autocomplete extends Component {
 
     if (name === 'filter' && !showContainer) {
       const refreshedItems = items
-        .map((item) => ({ ...item, isVisible: true }))
+        .map((item) => {
+          const { isSelected, isBackground } = item;
+          const hasIsBackground = Object.prototype.hasOwnProperty.call(item, 'isBackground');
+
+          const isVisible = hasIsBackground
+            ? isSelected || !isBackground
+            : true;
+
+          return { ...item, isVisible };
+        })
         .sort(Autocomplete.valueComparer)
         .sort(Autocomplete.isImportantComparer)
         .sort(Autocomplete.isSelectedComparer)
@@ -431,7 +443,7 @@ class Autocomplete extends Component {
 
     function formatItems(items = []) {
       return items.reduce((acc, item) => {
-        const { children } = item;
+        const { children, isBackground } = item;
 
         const isSelected = Array.isArray(value)
           ? value.some((key) => key === item.key)
@@ -442,7 +454,7 @@ class Autocomplete extends Component {
         const updatedItem = {
           ...item,
           isSelected,
-          isVisible: true,
+          isVisible: !isBackground,
         };
 
         delete updatedItem.children;
