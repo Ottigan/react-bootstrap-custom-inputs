@@ -51,7 +51,7 @@ class DatePicker extends Component {
       dates: DATE_DOT_FORMAT,
       trackableDates: {},
       currentMonth: [],
-      showContainer: false,
+      showContainer: true, // ! TO BE REMOVED
       isValid: null,
     };
 
@@ -206,7 +206,7 @@ class DatePicker extends Component {
     const initialDates = dates === DATE_DOT_FORMAT
       ? []
       : dates.split(' ').map((date) => moment(date, DATE_DOT_FORMAT).format('YYYY-MM-DD'));
-    const lastInitialDate = initialDates.at(-1);
+    const lastInitialDate = initialDates[initialDates.length - 1];
     const endOfLastMonth = moment(lastInitialDate).endOf('month');
 
     const startOfMonth = moment(currentPeriod).startOf('month');
@@ -218,7 +218,7 @@ class DatePicker extends Component {
       .reduce(
         (acc, dateOfMonth, i, arr) => {
           const updatedAcc = acc;
-          const lastWeek = updatedAcc.at(-1);
+          const lastWeek = updatedAcc[updatedAcc.length - 1];
 
           const day = moment(startOfMonth).add(dateOfMonth, 'days');
           const weekday = day.weekday();

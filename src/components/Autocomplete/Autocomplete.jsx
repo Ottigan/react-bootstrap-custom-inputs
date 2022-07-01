@@ -235,7 +235,7 @@ class Autocomplete extends Component {
     }
 
     function updateSingleSelect(arr, keys) {
-      const selectedKey = keys.at(-1);
+      const selectedKey = keys[keys.length - 1];
 
       return arr.map((item) => {
         const { key, isSelected, children } = item;
@@ -298,9 +298,8 @@ class Autocomplete extends Component {
       const refreshedItems = items
         .map((item) => {
           const { isSelected, isBackground } = item;
-          const hasIsBackground = Object.prototype.hasOwnProperty.call(item, 'isBackground');
 
-          const isVisible = hasIsBackground
+          const isVisible = isBackground
             ? isSelected || !isBackground
             : true;
 
