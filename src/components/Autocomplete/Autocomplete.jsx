@@ -396,6 +396,7 @@ class Autocomplete extends Component {
     const { items } = this.state;
 
     const {
+      value: prevValue,
       onChange,
       name,
       multiselect,
@@ -406,10 +407,11 @@ class Autocomplete extends Component {
     const isValid = valid === null ? !!selectedItems.length : valid;
     const selectedKeys = selectedItems.map((item) => item.key);
     const value = multiselect ? selectedKeys : selectedKeys?.[0];
+    const isValueDifferent = JSON.stringify(prevValue) !== JSON.stringify(value);
 
     this.setState({ showContainer, isValid }, () => {
       this.renderSelectedPreview();
-      onChange({ target: { name, value } });
+      if (isValueDifferent) onChange({ target: { name, value } });
     });
   }
 
