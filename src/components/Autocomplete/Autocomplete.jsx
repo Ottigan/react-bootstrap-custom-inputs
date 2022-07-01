@@ -231,7 +231,7 @@ class Autocomplete extends Component {
   }
 
   handleSelect(e) {
-    const { inputRef, items } = this.state;
+    const { items } = this.state;
     const { multiselect, disableDeselect } = this.props;
     const { name, value } = e.target;
     const valueAsKeys = value.split('.');
@@ -293,9 +293,7 @@ class Autocomplete extends Component {
       const updatedItems = updateSingleSelect(items, valueAsKeys);
 
       this.setState({ items: updatedItems }, () => {
-        // Hack for blur() to work in Firefox
-        inputRef.current.focus();
-        inputRef.current.blur();
+        this.updateParent(false);
       });
     }
   }

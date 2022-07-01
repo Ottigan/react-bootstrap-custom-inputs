@@ -42,6 +42,7 @@ const Items = function (props) {
             <button
               onClick={handler}
               type="button"
+              name="item"
               value={currentKey}
               title={title || value}
               className={`w-100 autocomplete-item text-start text-truncate list-group-item ${someChildren ? 'parent' : ''} ${isSelected ? 'selected' : ''}`}
