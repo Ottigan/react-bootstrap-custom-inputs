@@ -82,6 +82,14 @@ class Autocomplete extends Component {
     return 1;
   }
 
+  static isBackgroundComparer(a, b) {
+    if (a.isBackground === b.isBackground) return 0;
+
+    if (a.isBackground) return 1;
+
+    return -1;
+  }
+
   static customComparer(a, b) {
     if (a.sort && b.sort) {
       if (typeof a.sort === 'string' && typeof b.sort === 'string') {
@@ -300,7 +308,7 @@ class Autocomplete extends Component {
           const { isSelected, isBackground } = item;
 
           const isVisible = isBackground
-            ? isSelected || !isBackground
+            ? !!isSelected
             : true;
 
           return { ...item, isVisible };
@@ -308,7 +316,8 @@ class Autocomplete extends Component {
         .sort(Autocomplete.valueComparer)
         .sort(Autocomplete.isImportantComparer)
         .sort(Autocomplete.isSelectedComparer)
-        .sort(Autocomplete.customComparer);
+        .sort(Autocomplete.customComparer)
+        .sort(Autocomplete.isBackgroundComparer);
 
       this.setState({
         items: refreshedItems,

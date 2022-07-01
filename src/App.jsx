@@ -42,19 +42,10 @@ class App extends Component {
           <Autocomplete
             onChange={this.handleChange}
             value={select}
-            list={[
-              {
-                key: 'test1',
-                value: 'test1',
-                isImportant: true,
-                isBackground: true,
-              },
-              {
-                key: 'test2',
-                title: 'test2',
-                value: 'test2',
-              },
-            ]}
+            list={Array.from({ length: 5 }, (_, i) => ({
+              key: `test${i + 1}`,
+              value: `test${i + 1}`,
+            }))}
             name="select"
             label={t('global.list')}
             className="col-3"

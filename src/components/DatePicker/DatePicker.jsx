@@ -51,7 +51,7 @@ class DatePicker extends Component {
       dates: DATE_DOT_FORMAT,
       trackableDates: {},
       currentMonth: [],
-      showContainer: true, // ! TO BE REMOVED
+      showContainer: false,
       isValid: null,
     };
 
