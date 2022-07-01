@@ -114,8 +114,8 @@ class Autocomplete extends Component {
     });
   }
 
-  static getVisibleItemsCount(arr = []) {
-    return arr.reduce((acc, item) => {
+  static getVisibleItemsCount(items = []) {
+    return items.reduce((acc, item) => {
       const { children, isVisible } = item;
 
       const countFromChildren = Array.isArray(children)
@@ -130,8 +130,8 @@ class Autocomplete extends Component {
     }, 0);
   }
 
-  static updateItems(arr, isSelected) {
-    return arr.map((item) => {
+  static updateItemIsSelected(items, isSelected) {
+    return items.map((item) => {
       const { children } = item;
 
       const updatedItem = {
@@ -140,11 +140,21 @@ class Autocomplete extends Component {
       };
 
       if (children) {
-        updatedItem.children = Autocomplete.updateItems(children, isSelected);
+        updatedItem.children = Autocomplete.updateItemIsSelected(children, isSelected);
       }
 
       return updatedItem;
     });
+  }
+
+  static updateItemsIsVisible(item) {
+    const { isSelected, isBackground } = item;
+
+    const isVisible = isBackground
+      ? !!isSelected
+      : true;
+
+    return { ...item, isVisible };
   }
 
   constructor(props) {
@@ -272,7 +282,7 @@ class Autocomplete extends Component {
       if (name === 'masterSelect') {
         this.setState({
           areAllSelected: true,
-          items: Autocomplete.updateItems(items, true),
+          items: Autocomplete.updateItemIsSelected(items, true),
         });
       } else {
         updateMultiselect(items, valueAsKeys);
@@ -294,7 +304,7 @@ class Autocomplete extends Component {
     const { items, showContainer } = this.state;
 
     this.setState({
-      items: Autocomplete.updateItems(items, false),
+      items: Autocomplete.updateItemIsSelected(items, false),
     }, () => this.updateParent(showContainer));
   }
 
@@ -303,21 +313,14 @@ class Autocomplete extends Component {
     const { name } = e.target;
 
     if (name === 'filter' && !showContainer) {
-      const refreshedItems = items
-        .map((item) => {
-          const { isSelected, isBackground } = item;
-
-          const isVisible = isBackground
-            ? !!isSelected
-            : true;
-
-          return { ...item, isVisible };
-        })
+      const refreshedItems = items.map((item) => Autocomplete.updateItemsIsVisible(item))
         .sort(Autocomplete.valueComparer)
         .sort(Autocomplete.isImportantComparer)
         .sort(Autocomplete.customComparer)
         .sort(Autocomplete.isBackgroundComparer)
         .sort(Autocomplete.isSelectedComparer);
+
+      console.log(refreshedItems);
 
       this.setState({
         items: refreshedItems,
@@ -451,7 +454,7 @@ class Autocomplete extends Component {
 
     function formatItems(items = []) {
       return items.reduce((acc, item) => {
-        const { children, isBackground } = item;
+        const { children } = item;
 
         const isSelected = Array.isArray(value)
           ? value.some((key) => key === item.key)
@@ -459,11 +462,10 @@ class Autocomplete extends Component {
 
         if (!isSelected) areAllSelected = false;
 
-        const updatedItem = {
+        const updatedItem = Autocomplete.updateItemsIsVisible({
           ...item,
           isSelected,
-          isVisible: !isBackground,
-        };
+        });
 
         delete updatedItem.children;
 

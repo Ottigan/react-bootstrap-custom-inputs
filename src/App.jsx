@@ -16,7 +16,7 @@ class App extends Component {
 
     this.state = {
       dates: '',
-      select: 'test2',
+      select: 'test10',
       time: '10:00',
     };
 
@@ -42,9 +42,10 @@ class App extends Component {
           <Autocomplete
             onChange={this.handleChange}
             value={select}
-            list={Array.from({ length: 5 }, (_, i) => ({
+            list={Array.from({ length: 10 }, (_, i) => ({
               key: `test${i + 1}`,
               value: `test${i + 1}`,
+              isBackground: true,
             }))}
             name="select"
             label={t('global.list')}
