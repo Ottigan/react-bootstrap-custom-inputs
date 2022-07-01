@@ -54,6 +54,10 @@ $valid-color: hsl(152, 69%, 19%);
         &.parent {
           font-weight: 600;
         }
+
+        svg {
+          pointer-events: none;
+        }
       }
     }
   }
