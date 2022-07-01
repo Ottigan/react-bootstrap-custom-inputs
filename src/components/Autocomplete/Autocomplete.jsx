@@ -292,7 +292,8 @@ class Autocomplete extends Component {
     } else {
       const updatedItems = updateSingleSelect(items, valueAsKeys);
 
-      this.setState({ items: updatedItems }, () => {
+      // Resetting filter to avoid repeat call of handleSelect() due to applyFilter()
+      this.setState({ items: updatedItems, filter: '' }, () => {
         this.updateParent(false);
       });
     }
@@ -391,7 +392,7 @@ class Autocomplete extends Component {
   }
 
   updateParent(showContainer) {
-    const { items } = this.state;
+    const { inputRef, items } = this.state;
 
     const {
       value: prevValue,
@@ -408,8 +409,10 @@ class Autocomplete extends Component {
     const isValueDifferent = JSON.stringify(prevValue) !== JSON.stringify(value);
 
     this.setState({ showContainer, isValid }, () => {
-      this.renderSelectedPreview();
       if (isValueDifferent) onChange({ target: { name, value } });
+
+      this.renderSelectedPreview();
+      inputRef.current.blur();
     });
   }
 
