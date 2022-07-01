@@ -45,7 +45,7 @@ class App extends Component {
             list={Array.from({ length: 10 }, (_, i) => ({
               key: `test${i + 1}`,
               value: `test${i + 1}`,
-              isBackground: true,
+              isBackground: (i + 1) % 2 === 0,
             }))}
             name="select"
             label={t('global.list')}

@@ -320,8 +320,6 @@ class Autocomplete extends Component {
         .sort(Autocomplete.isBackgroundComparer)
         .sort(Autocomplete.isSelectedComparer);
 
-      console.log(refreshedItems);
-
       this.setState({
         items: refreshedItems,
         showContainer: true,
