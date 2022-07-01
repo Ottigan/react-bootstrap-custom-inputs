@@ -315,9 +315,9 @@ class Autocomplete extends Component {
         })
         .sort(Autocomplete.valueComparer)
         .sort(Autocomplete.isImportantComparer)
-        .sort(Autocomplete.isSelectedComparer)
         .sort(Autocomplete.customComparer)
-        .sort(Autocomplete.isBackgroundComparer);
+        .sort(Autocomplete.isBackgroundComparer)
+        .sort(Autocomplete.isSelectedComparer);
 
       this.setState({
         items: refreshedItems,
