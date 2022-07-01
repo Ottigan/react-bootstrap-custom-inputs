@@ -204,7 +204,7 @@ class Autocomplete extends Component {
 
     if (prevValue !== currValue
       || prevName !== currName
-      || prevList.length !== currList.length
+      || JSON.stringify(prevList) !== JSON.stringify(currList)
       || prevValid !== currValid
       || prevLanguage !== currLanguage
     ) {

@@ -47,7 +47,7 @@ $disabled-bg-color: hsl(210, 16%, 93%);
       align-items: center;
       outline: none;
       border: none;
-      background-color: white;
+      background-color: $container-bg-color;
       padding: 1px;
     }
 
@@ -55,7 +55,9 @@ $disabled-bg-color: hsl(210, 16%, 93%);
       background-color: $disabled-bg-color;
 
       .time-picker-hours,
+      .time-picker-seperator,
       .time-picker-minutes {
+        background-color: $disabled-bg-color;
         cursor: default;
       }
     }
