@@ -338,9 +338,14 @@ class DatePicker extends Component {
       });
     } else {
       const currentPeriod = moment();
+      // * Default preview if value is invalid
+      const dates = isArray
+        ? [DATE_DOT_FORMAT]
+        : DATE_DOT_FORMAT;
 
       this.setState({
         currentPeriod,
+        dates,
       }, () => {
         this.updateCurrentMonth(true);
         this.updateIsValid();

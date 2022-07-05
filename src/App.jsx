@@ -38,7 +38,6 @@ class App extends Component {
 
     return (
       <div className="container-fluid vh-100">
-
         <form className="row justify-content-center align-items-center h-100">
           <div className="d-flex justify-content-around align-items-end">
             <Autocomplete
@@ -65,7 +64,6 @@ class App extends Component {
               name="dates"
               label="Dates"
               language="lv"
-              asIcon
             />
             <TimePicker
               onChange={this.handleChange}
