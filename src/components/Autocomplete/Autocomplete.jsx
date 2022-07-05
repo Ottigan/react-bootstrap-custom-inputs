@@ -302,12 +302,14 @@ class Autocomplete extends Component {
     this.updateClearButtonVisibility();
   }
 
-  handleClear() {
-    const { items, showContainer } = this.state;
+  handleClear(e) {
+    e.stopPropagation();
+
+    const { items } = this.state;
 
     this.setState({
       items: Autocomplete.updateItemIsSelected(items, false),
-    }, () => this.updateParent(showContainer));
+    }, () => this.updateParent(false));
   }
 
   handleFocus(e) {
@@ -333,7 +335,7 @@ class Autocomplete extends Component {
   handleBlur(e) {
     const { inputRef } = this.state;
 
-    const validClasses = ['clear-btn', 'autocomplete-item-container', 'autocomplete-item'];
+    const validClasses = ['autocomplete-item-container', 'autocomplete-item'];
     const { relatedTarget } = e;
     const isValid = relatedTarget
       ? validClasses.some((className) => relatedTarget.classList.contains(className))
@@ -574,7 +576,7 @@ class Autocomplete extends Component {
         onFocus={this.handleFocus}
         className={`autocomplete-component position-relative ${className}`}
       >
-        <label className={`autocomplete-label d-block w-100 ${required ? 'required' : ''}`}>
+        <label className="autocomplete-label position-relative w-100">
           {label}
           <input
             ref={inputRef}

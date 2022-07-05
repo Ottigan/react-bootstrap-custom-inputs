@@ -3,10 +3,6 @@ $valid-bg-color: hsl(150, 47%, 78%);
 $valid-color: hsl(152, 69%, 19%);
 
 .autocomplete-component {
-  .autocomplete-label {
-    position: relative;
-  }
-
   .autocomplete-item-container {
     max-height: 0px;
     width: 99%;
