@@ -1,11 +1,11 @@
 {
   "reactBootstrapCustomInputs": {
     "components": {
+      "clearButton": {
+        "clear": "Notīrīt"
+      },
       "autocomplete": {
         "components": {
-          "clearButton": {
-            "clear": "Notīrīt"
-          },
           "masterSelect": {
             "selectAll": "Izvēlēties visu"
           },

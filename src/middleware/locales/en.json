@@ -1,11 +1,11 @@
 {
   "reactBootstrapCustomInputs": {
     "components": {
+      "clearButton": {
+        "clear": "Clear"
+      },
       "autocomplete": {
         "components": {
-          "clearButton": {
-            "clear": "Clear"
-          },
           "masterSelect": {
             "selectAll": "Select all"
           },

@@ -4,6 +4,7 @@ import { withTranslation } from 'react-i18next';
 import Autocomplete from './components/Autocomplete';
 import DatePicker from './components/DatePicker';
 import TimePicker from './components/TimePicker';
+import TextInput from './components/TextInput/TextInput';
 // import { Autocomplete, DatePicker, TimePicker } from '../dist';
 
 const propTypes = {
@@ -15,6 +16,7 @@ class App extends Component {
     super(props);
 
     this.state = {
+      textValue: 'test',
       dates: [],
       select: 'test10',
       time: '10:00',
@@ -33,13 +35,21 @@ class App extends Component {
   }
 
   render() {
-    const { dates, select, time } = this.state;
+    const {
+      textValue, dates, select, time,
+    } = this.state;
     const { t } = this.props;
 
     return (
       <div className="container-fluid vh-100">
         <form className="row justify-content-center align-items-center h-100">
           <div className="d-flex justify-content-around align-items-end">
+            <TextInput
+              onChange={this.handleChange}
+              value={textValue}
+              name={textValue}
+              label={t('global.textInput')}
+            />
             <Autocomplete
               onChange={this.handleChange}
               value={select}
