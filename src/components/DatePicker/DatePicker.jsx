@@ -380,7 +380,7 @@ class DatePicker extends Component {
     }
 
     return (
-      <div key={`date-picker-${name}`} onFocus={this.handleFocus} onBlur={this.handleBlur} className={`date-picker-component ${className}`}>
+      <span key={`date-picker-${name}`} onFocus={this.handleFocus} onBlur={this.handleBlur} className={`date-picker-component ${className}`}>
         {asIcon
           ? (
             <button
@@ -493,7 +493,7 @@ class DatePicker extends Component {
             </table>
           </div>
         ) : null}
-      </div>
+      </span>
     );
   }
 }
