@@ -18,6 +18,7 @@
       },
       "datePicker": {
         "previous": "Iepriekšējais",
+        "calendar": "Kalendārs",
         "next": "Nākamais",
         "monday": "Pr",
         "tuesday": "Ot",

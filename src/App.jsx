@@ -63,7 +63,6 @@ class App extends Component {
               value={dates}
               name="dates"
               label="Dates"
-              asIcon
               language="lv"
               className="col-3"
             />

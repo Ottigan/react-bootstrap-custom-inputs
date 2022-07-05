@@ -18,6 +18,7 @@
       },
       "datePicker": {
         "previous": "Previous",
+        "calendar": "Calendar",
         "next": "Next",
         "monday": "Mon",
         "tuesday": "Tue",
