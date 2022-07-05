@@ -394,7 +394,7 @@ class DatePicker extends Component {
               title={t('components.datePicker.calendar')}
               type="button"
               name="dates"
-              className="btn btn-dark"
+              className="date-picker-btn btn btn-dark"
             >
               <FontAwesomeIcon icon={faCalendar} />
             </button>
