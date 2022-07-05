@@ -5,13 +5,25 @@
     "es2021": true,
     "node": true
   },
-  "extends": ["plugin:react/recommended", "airbnb", "plugin:react/jsx-runtime"],
+  "extends": [
+    "airbnb",
+    "plugin:react/recommended",
+    "plugin:react/jsx-runtime",
+    "plugin:react-hooks/recommended"
+  ],
   "parserOptions": {
     "ecmaFeatures": { "jsx": true },
     "ecmaVersion": 12,
     "sourceType": "module"
   },
-  "plugins": ["react", "jest"],
+  "plugins": ["react", "jest", "react-hooks"],
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "moduleDirectory": ["node_modules", "src"]
+      }
+    }
+  },
   "rules": {
     "indent": ["error", 2],
     "no-console": ["error", { "allow": ["warn", "error", "info", "log"] }],

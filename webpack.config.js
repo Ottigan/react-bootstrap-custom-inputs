@@ -19,6 +19,10 @@ const config = {
   },
   resolve: {
     extensions: ['.js', '.jsx'],
+    alias: {
+      components: path.resolve(__dirname, 'src/components'),
+      hooks: path.resolve(__dirname, 'src/hooks'),
+    },
   },
   plugins: [
     // Moment.js is an extremely popular library that bundles large locale files

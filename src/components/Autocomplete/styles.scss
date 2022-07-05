@@ -5,17 +5,6 @@ $valid-color: hsl(152, 69%, 19%);
 .autocomplete-component {
   .autocomplete-label {
     position: relative;
-
-    .btn-fa {
-      position: absolute;
-      bottom: 5px;
-      right: 5px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 28px;
-      width: 28px;
-    }
   }
 
   .autocomplete-item-container {

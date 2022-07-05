@@ -1,8 +1,8 @@
 import { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
+import ClearButton from 'components/ClearButton';
 import MasterSelect from './components/MasterSelect';
-import ClearButton from './components/ClearButton';
 import Items from './components/Items';
 import './styles.scss';
 
@@ -171,6 +171,7 @@ class Autocomplete extends Component {
       filterTimeout: null,
       showContainer: false,
       isValid: false,
+      isClearButtonVisible: false,
     };
 
     this.handleFilter = this.handleFilter.bind(this);
@@ -297,6 +298,8 @@ class Autocomplete extends Component {
         this.updateParent(false);
       });
     }
+
+    this.updateClearButtonVisibility();
   }
 
   handleClear() {
@@ -330,7 +333,7 @@ class Autocomplete extends Component {
   handleBlur(e) {
     const { inputRef } = this.state;
 
-    const validClasses = ['autocomplete-reset-btn', 'autocomplete-item-container', 'autocomplete-item'];
+    const validClasses = ['clear-btn', 'autocomplete-item-container', 'autocomplete-item'];
     const { relatedTarget } = e;
     const isValid = relatedTarget
       ? validClasses.some((className) => relatedTarget.classList.contains(className))
@@ -354,6 +357,17 @@ class Autocomplete extends Component {
     const renderedItems = slices * sliceSize;
 
     this.setState({ renderedItems });
+  }
+
+  updateClearButtonVisibility() {
+    const {
+      items, multiselect, disableDeselect, disabled,
+    } = this.state;
+
+    const selected = !!Autocomplete.extractSelected(items).length;
+    const isClearButtonVisible = selected && (multiselect || !disableDeselect) && !disabled;
+
+    this.setState({ isClearButtonVisible });
   }
 
   // If a single item matches filter, select it
@@ -502,7 +516,10 @@ class Autocomplete extends Component {
 
     this.setState({
       items, visibleItemsCount, isValid, areAllSelected,
-    }, this.renderSelectedPreview);
+    }, () => {
+      this.renderSelectedPreview();
+      this.updateClearButtonVisibility();
+    });
   }
 
   renderSelectedPreview() {
@@ -532,6 +549,7 @@ class Autocomplete extends Component {
       visibleItemsCount,
       showContainer,
       isValid,
+      isClearButtonVisible,
     } = this.state;
 
     const {
@@ -541,7 +559,6 @@ class Autocomplete extends Component {
       multiselect,
       required,
       disabled,
-      disableDeselect,
     } = this.props;
 
     function getValidity(validity) {
@@ -573,10 +590,7 @@ class Autocomplete extends Component {
           />
           <ClearButton
             handler={this.handleClear}
-            multiselect={multiselect}
-            disabled={disabled}
-            items={items}
-            disableDeselect={disableDeselect}
+            isVisible={isClearButtonVisible}
           />
         </label>
         <ul
