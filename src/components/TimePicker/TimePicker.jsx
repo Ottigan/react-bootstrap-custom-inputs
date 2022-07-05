@@ -1,6 +1,7 @@
 import { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import ClearButton from 'components/ClearButton';
 import Hours from './components/Hours';
 import Minutes from './components/Minutes';
 import './styles.scss';
@@ -97,6 +98,8 @@ const MINUTES_24H_FORMAT = [
   '58',
 ];
 
+const FALLBACK_TIME = '--:--';
+
 function updateChecked(object, target) {
   return Object.keys(object).reduce((acc, x) => {
     if (x === target) return { ...acc, [x]: true };
@@ -118,7 +121,7 @@ const propTypes = {
 
 const defaultProps = {
   label: '',
-  value: '--:--',
+  value: FALLBACK_TIME,
   className: '',
   required: false,
   valid: null,
@@ -154,6 +157,7 @@ class TimePicker extends Component {
     this.handleChecked = this.handleChecked.bind(this);
     this.handleScroll = this.handleScroll.bind(this);
     this.handleFocus = this.handleFocus.bind(this);
+    this.handleClear = this.handleClear.bind(this);
     this.handleBlur = this.handleBlur.bind(this);
   }
 
@@ -222,6 +226,7 @@ class TimePicker extends Component {
         } else {
           hoursRef.current.classList.add('highlighted');
         }
+
         hoursScrollRef.current.scrollTop = HOURS_DEFAULT_SCROLL_TOP;
         minutesScrollRef.current.scrollTop = MINUTES_DEFAULT_SCROLL_TOP;
       });
@@ -387,11 +392,19 @@ class TimePicker extends Component {
     }
   }
 
+  handleClear(e) {
+    e.stopPropagation();
+
+    this.setState({
+      time: FALLBACK_TIME,
+    }, () => this.updateParent(false));
+  }
+
   handleBlur(e) {
-    const { onChange, name } = this.props;
     const {
       inputRef, hoursRef, minutesRef, isClosing,
     } = this.state;
+
     const timePickerInputClass = 'time-picker-input';
     const timePickerHoursClass = 'time-picker-hours';
     const timePickerMinutesClass = 'time-picker-minutes';
@@ -427,12 +440,29 @@ class TimePicker extends Component {
     if (shouldRefocus) {
       inputRef.current.focus();
     } else {
-      const { time: value } = this.state;
-
       hoursRef.current.classList.remove('highlighted');
       minutesRef.current.classList.remove('highlighted');
-      this.setState({ showContainer: false }, () => onChange({ target: { name, value } }));
+
+      this.updateParent(false);
     }
+  }
+
+  updateParent(showContainer) {
+    const { inputRef, time: value } = this.state;
+
+    const {
+      value: prevValue,
+      onChange,
+      name,
+    } = this.props;
+
+    const isValueDifferent = value !== prevValue;
+
+    this.setState({ showContainer }, () => {
+      if (isValueDifferent) onChange({ target: { name, value } });
+
+      inputRef.current.blur();
+    });
   }
 
   updateIsValid() {
@@ -533,6 +563,10 @@ class TimePicker extends Component {
             name="time"
             data-name="time"
             disabled={disabled}
+          />
+          <ClearButton
+            handler={this.handleClear}
+            isVisible={time !== FALLBACK_TIME}
           />
         </label>
         {showContainer ? (
