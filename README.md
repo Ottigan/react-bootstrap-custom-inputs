@@ -76,6 +76,7 @@ export default App;
 | value | false | `string` or `string[]` in RFC2822 or ISO format | moment() |
 | className | false | `string` consisting of classes to apply to the input| - |
 | language | false | `string` currently supported values [`en`, `lv`] | 'en' |
+| asIcon | false | `bool` to render an icon depicting a calendar instead of text input | false |
 | multiselect | false | `bool` | false |
 | valid | false | `bool` | - |
 | required | false | `bool` | false |

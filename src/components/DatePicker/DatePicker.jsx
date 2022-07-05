@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import { faAngleLeft, faAngleRight, faCalendar } from '@fortawesome/free-solid-svg-icons';
 import { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
@@ -7,6 +7,20 @@ import moment from 'moment';
 import { uuidv4 } from '../../helpers/idGenerators';
 import './styles.scss';
 
+const MONTHS = {
+  1: 'january',
+  2: 'february',
+  3: 'march',
+  4: 'april',
+  5: 'may',
+  6: 'june',
+  7: 'july',
+  8: 'august',
+  9: 'september',
+  10: 'october',
+  11: 'november',
+  12: 'december',
+};
 const WEEK_LENGTH = 7;
 const DATE_DOT_FORMAT = 'DD.MM.YYYY';
 
@@ -26,6 +40,7 @@ const propTypes = {
   language: PropTypes.string,
   multiselect: PropTypes.bool,
   required: PropTypes.bool,
+  asIcon: PropTypes.bool,
   valid: PropTypes.bool,
   disabled: PropTypes.bool,
 };
@@ -36,6 +51,7 @@ const defaultProps = {
   className: '',
   language: '',
   required: false,
+  asIcon: false,
   valid: null,
   disabled: false,
 };
@@ -46,6 +62,7 @@ class DatePicker extends Component {
 
     this.state = {
       inputRef: createRef(),
+      btnRef: createRef(),
       currentPeriod: moment(),
       formattedCurrentPeriod: '',
       dates: DATE_DOT_FORMAT,
@@ -104,7 +121,7 @@ class DatePicker extends Component {
   }
 
   handleChecked(e) {
-    const { inputRef, trackableDates } = this.state;
+    const { trackableDates } = this.state;
     const { multiselect } = this.props;
     const { name, checked } = e.target;
 
@@ -151,7 +168,7 @@ class DatePicker extends Component {
         dates: date,
         trackableDates,
         showContainer: false,
-      }, () => inputRef.current.blur());
+      }, () => this.entryPoint.blur());
     }
   }
 
@@ -166,7 +183,6 @@ class DatePicker extends Component {
   }
 
   handleBlur(e) {
-    const { inputRef } = this.state;
     const validClasses = [
       'date-picker-container',
       'date-picker-prev',
@@ -180,7 +196,7 @@ class DatePicker extends Component {
       : false;
 
     if (isItem) {
-      inputRef.current.focus();
+      this.entryPoint.focus();
     } else {
       this.setState({ showContainer: false }, this.handleChange);
     }
@@ -198,6 +214,18 @@ class DatePicker extends Component {
     const nextPeriod = moment(currentPeriod).startOf('month').add(1, 'month');
 
     this.setState({ currentPeriod: nextPeriod }, this.updateCurrentMonth);
+  }
+
+  // Get element through which the component was started
+  get entryPoint() {
+    const { asIcon } = this.props;
+    const { inputRef, btnRef } = this.state;
+
+    if (asIcon) {
+      return btnRef.current;
+    }
+
+    return inputRef.current;
   }
 
   updateCurrentMonth(initial) {
@@ -256,8 +284,9 @@ class DatePicker extends Component {
 
     const { t } = this.props;
 
-    const currentPeriodMonth = moment(currentPeriod).format('MMMM').toLowerCase();
+    const currentPeriodMonth = MONTHS[moment(currentPeriod).format('M')];
     const currentPeriodYear = moment(currentPeriod).format('YYYY');
+
     const formattedCurrentPeriod = `${t(
       `components.datePicker.${currentPeriodMonth}`,
     )}, ${currentPeriodYear}`;
@@ -322,6 +351,7 @@ class DatePicker extends Component {
   render() {
     const {
       inputRef,
+      btnRef,
       showContainer,
       dates,
       trackableDates,
@@ -334,6 +364,7 @@ class DatePicker extends Component {
       t,
       label,
       name,
+      asIcon,
       disabled,
       className,
     } = this.props;
@@ -350,19 +381,34 @@ class DatePicker extends Component {
 
     return (
       <div key={`date-picker-${name}`} onFocus={this.handleFocus} onBlur={this.handleBlur} className={`date-picker-component ${className}`}>
-        <label className="d-block">
-          {label}
-          <input
-            ref={inputRef}
-            value={dates}
-            onClick={this.handleFocus}
-            className={`date-picker-input form-control ${getValidity(isValid)}`}
-            type="text"
-            name="dates"
-            disabled={disabled}
-            readOnly
-          />
-        </label>
+        {asIcon
+          ? (
+            <button
+              ref={btnRef}
+              onClick={this.handleFocus}
+              title={t('components.datePicker.calendar')}
+              type="button"
+              name="dates"
+              className="btn btn-dark"
+            >
+              <FontAwesomeIcon icon={faCalendar} />
+            </button>
+          )
+          : (
+            <label className="d-block">
+              {label}
+              <input
+                ref={inputRef}
+                value={dates}
+                onClick={this.handleFocus}
+                className={`date-picker-input form-control ${getValidity(isValid)}`}
+                type="text"
+                name="dates"
+                disabled={disabled}
+                readOnly
+              />
+            </label>
+          )}
         {showContainer ? (
           <div className="date-picker-container">
             <table tabIndex="-1" className="date-picker-table table">
