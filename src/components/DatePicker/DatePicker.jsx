@@ -322,7 +322,7 @@ class DatePicker extends Component {
 
     const isArray = Array.isArray(value);
     const isValid = isArray
-      ? value.some((date) => !moment(date).isValid())
+      ? value.length && value.every((date) => moment(date).isValid())
       : moment(value).isValid();
 
     if (isValid) {
@@ -341,14 +341,10 @@ class DatePicker extends Component {
       });
     } else {
       const currentPeriod = moment();
-      // * Default preview if value is invalid
-      const dates = isArray
-        ? [DATE_DOT_FORMAT]
-        : DATE_DOT_FORMAT;
 
       this.setState({
         currentPeriod,
-        dates,
+        dates: DATE_DOT_FORMAT,
       }, () => {
         this.updateCurrentMonth(true);
         this.updateIsValid();

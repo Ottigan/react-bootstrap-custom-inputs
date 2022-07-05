@@ -15,7 +15,7 @@ class App extends Component {
     super(props);
 
     this.state = {
-      dates: '',
+      dates: [],
       select: 'test10',
       time: '10:00',
     };
@@ -64,7 +64,7 @@ class App extends Component {
               name="dates"
               label="Dates"
               language="lv"
-              asIcon
+              multiselect
             />
             <TimePicker
               onChange={this.handleChange}
