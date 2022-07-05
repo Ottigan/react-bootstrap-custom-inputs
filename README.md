@@ -95,3 +95,17 @@ export default App;
 | valid | false | `bool` | - |
 | required | false | `bool` | false |
 | disabled | false | `bool` | false |
+
+<p>&nbsp;</p>
+
+### TextInput Props:
+| Name | Required | Description | Default |
+| ---- | -------- | ----------- | ------- |
+| onChange | true | handler `function` | - |
+| name | true | `string` representing State property | - |
+| label | false | `string` to enable interaction with the input through it's label | - |
+| value | false | `string` | '' |
+| className | false | `string` | - |
+| valid | false | `bool` | - |
+| required | false | `bool` | false |
+| disabled | false | `bool` | false |
