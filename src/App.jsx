@@ -64,6 +64,7 @@ class App extends Component {
               name="dates"
               label="Dates"
               language="lv"
+              asIcon
             />
             <TimePicker
               onChange={this.handleChange}

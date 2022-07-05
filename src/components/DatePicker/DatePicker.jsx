@@ -175,10 +175,13 @@ class DatePicker extends Component {
   handleFocus(e) {
     const { showContainer } = this.state;
     const { disabled } = this.props;
-    const { name } = e.target;
+    const { target, type } = e;
+    const { name } = target;
 
     if (name === 'dates' && !showContainer && !disabled) {
       this.setState({ showContainer: true });
+    } else if (name === 'toggler' && type === 'click' && !disabled) {
+      this.setState({ showContainer: !showContainer });
     }
   }
 
@@ -393,8 +396,8 @@ class DatePicker extends Component {
               onClick={this.handleFocus}
               title={t('components.datePicker.calendar')}
               type="button"
-              name="dates"
-              className="date-picker-btn btn btn-dark"
+              name="toggler"
+              className="date-picker-toggler btn btn-dark"
             >
               <FontAwesomeIcon icon={faCalendar} />
             </button>

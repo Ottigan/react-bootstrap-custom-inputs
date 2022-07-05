@@ -7,7 +7,11 @@ $today-color: hsl(219, 46%, 20%);
 .date-picker-component {
   position: relative;
 
-  .date-picker-btn + .date-picker-container {
+  .date-picker-toggler svg {
+    pointer-events: none;
+  }
+
+  .date-picker-toggler + .date-picker-container {
     right: 0;
   }
 
