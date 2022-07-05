@@ -380,14 +380,20 @@ class Autocomplete extends Component {
     const visibleItemKeys = filter.length && getVisibleItemsKeys(items);
 
     if (visibleItemKeys.length === 1) {
-      const event = {
-        target: {
-          name: 'applyFilter',
-          value: visibleItemKeys[0],
-        },
-      };
+      const selectedItems = Autocomplete.extractSelected(items);
+      const selectedItemKey = visibleItemKeys[0].split('.').slice(-1)[0];
+      const isAlreadySelected = selectedItems.some((item) => item.key === selectedItemKey);
 
-      this.handleSelect(event);
+      if (!isAlreadySelected) {
+        const event = {
+          target: {
+            name: 'applyFilter',
+            value: visibleItemKeys[0],
+          },
+        };
+
+        this.handleSelect(event);
+      }
     }
   }
 

@@ -39,34 +39,42 @@ class App extends Component {
     return (
       <div className="container-fluid vh-100">
         <form className="row justify-content-center align-items-center h-100">
-          <Autocomplete
-            onChange={this.handleChange}
-            value={select}
-            list={Array.from({ length: 10 }, (_, i) => ({
-              key: `test${i + 1}`,
-              value: `test${i + 1}`,
-              isBackground: (i + 1) % 2 === 0,
-            }))}
-            name="select"
-            label={t('global.list')}
-            className="col-3"
-            language="lv"
-          />
-          <DatePicker
-            onChange={this.handleChange}
-            value={dates}
-            name="dates"
-            label="Dates"
-            className="col-3"
-            language="lv"
-          />
-          <TimePicker
-            onChange={this.handleChange}
-            value={time}
-            name="time"
-            label="Time"
-            className="col-2"
-          />
+          <div className="d-flex justify-content-around align-items-end">
+            <Autocomplete
+              onChange={this.handleChange}
+              value={select}
+              list={Array.from({ length: 10 }, (_, i) => {
+                const item = {
+                  key: `test${i + 1}`,
+                  value: `test${i + 1}`,
+                  isBackground: (i + 1) % 2 === 0,
+                };
+
+                return item;
+              })}
+              name="select"
+              label={t('global.list')}
+              className="col-3"
+              language="lv"
+              multiselect
+            />
+            <DatePicker
+              onChange={this.handleChange}
+              value={dates}
+              name="dates"
+              label="Dates"
+              asIcon
+              language="lv"
+              className="col-3"
+            />
+            <TimePicker
+              onChange={this.handleChange}
+              value={time}
+              name="time"
+              label="Time"
+              className="col-2"
+            />
+          </div>
         </form>
       </div>
     );
