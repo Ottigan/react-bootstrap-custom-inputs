@@ -66,7 +66,7 @@ class App extends Component {
               label={t('global.list')}
               className="col-3"
               language="en"
-              multiselectPreview="display"
+              multiselectPreview="default"
               multiselect
             />
             <DatePicker

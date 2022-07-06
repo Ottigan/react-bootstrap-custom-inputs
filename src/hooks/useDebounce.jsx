@@ -5,11 +5,6 @@ export default function useDebounce(initialValue, msDelay = 500) {
   const [debouncedValue, setDebouncedValue] = useState('');
 
   useEffect(() => {
-    setValue(initialValue);
-    setDebouncedValue(initialValue);
-  }, [initialValue]);
-
-  useEffect(() => {
     const timeout = setTimeout(() => {
       setDebouncedValue(value);
     }, msDelay);

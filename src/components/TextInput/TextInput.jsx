@@ -28,7 +28,11 @@ const defaultProps = {
 function TextInput({
   value: propsValue, onChange, name, label, className, valid, required, disabled,
 }) {
-  const [value, setValue, debouncedValue] = useDebounce(propsValue);
+  const [value, setValue, debouncedValue] = useDebounce('');
+
+  useEffect(() => {
+    setValue(propsValue);
+  }, [propsValue, setValue]);
 
   useEffect(() => {
     if (propsValue !== debouncedValue) {
