@@ -97,4 +97,18 @@ describe('TextInput', () => {
     expect(getClassName()).not.toMatch(/is-valid/);
     expect(getClassName()).not.toMatch(/is-invalid/);
   });
+
+  it('should update value if prop.value changes externally', () => {
+    const handler = jest.fn();
+    const name = 'test';
+    const value = 'foo';
+
+    const { rerender } = render(<TextInput onChange={handler} name={name} value={value} />);
+    expect(screen.getByTestId('input').value).toMatch(value);
+
+    const newValue = 'bar';
+
+    rerender(<TextInput onChange={handler} name={name} value={newValue} />);
+    expect(screen.getByTestId('input').value).toMatch(newValue);
+  });
 });
