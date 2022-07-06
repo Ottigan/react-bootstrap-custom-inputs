@@ -417,7 +417,7 @@ class DatePicker extends Component {
             </button>
           )
           : (
-            <label className="d-block">
+            <label className="position-relative w-100">
               {label}
               <input
                 ref={inputRef}
