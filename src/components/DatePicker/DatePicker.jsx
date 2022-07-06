@@ -4,6 +4,7 @@ import { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 import moment from 'moment';
+import ClearButton from 'components/ClearButton';
 import { uuidv4 } from '../../helpers/idGenerators';
 import './styles.scss';
 
@@ -77,6 +78,7 @@ class DatePicker extends Component {
     this.handleBlur = this.handleBlur.bind(this);
     this.handlePrev = this.handlePrev.bind(this);
     this.handleNext = this.handleNext.bind(this);
+    this.handleClear = this.handleClear.bind(this);
   }
 
   componentDidMount() {
@@ -99,25 +101,6 @@ class DatePicker extends Component {
     } else if (prevValid !== currValid) {
       this.updateIsValid();
     }
-  }
-
-  handleChange() {
-    const { onChange, name, multiselect } = this.props;
-    const { dates } = this.state;
-
-    const value = (() => {
-      if (multiselect) {
-        return dates && dates !== DATE_DOT_FORMAT
-          ? dates.split(', ').map((date) => moment(date, DATE_DOT_FORMAT).format('YYYY-MM-DD'))
-          : [];
-      }
-
-      return dates === DATE_DOT_FORMAT
-        ? ''
-        : moment(dates, DATE_DOT_FORMAT).format('YYYY-MM-DD');
-    })();
-
-    onChange({ target: { name, value } });
   }
 
   handleChecked(e) {
@@ -152,7 +135,7 @@ class DatePicker extends Component {
       this.setState({
         dates,
         trackableDates: updatedTrackable,
-      }, this.handleChange);
+      }, () => this.updateParent(true));
     } else {
       const date = moment(name).format(DATE_DOT_FORMAT);
 
@@ -167,7 +150,6 @@ class DatePicker extends Component {
       this.setState({
         dates: date,
         trackableDates,
-        showContainer: false,
       }, () => this.entryPoint.blur());
     }
   }
@@ -183,6 +165,14 @@ class DatePicker extends Component {
     } else if (name === 'toggler' && type === 'click' && !disabled) {
       this.setState({ showContainer: !showContainer });
     }
+  }
+
+  handleClear(e) {
+    e.stopPropagation();
+
+    this.setState({
+      dates: DATE_DOT_FORMAT,
+    }, () => this.entryPoint.blur());
   }
 
   handleBlur(e) {
@@ -201,7 +191,7 @@ class DatePicker extends Component {
     if (isItem) {
       this.entryPoint.focus();
     } else {
-      this.setState({ showContainer: false }, this.handleChange);
+      this.updateParent(false);
     }
   }
 
@@ -302,6 +292,35 @@ class DatePicker extends Component {
     });
   }
 
+  updateParent(showContainer) {
+    const { dates } = this.state;
+
+    const {
+      value: prevValue,
+      multiselect,
+      onChange,
+      name,
+    } = this.props;
+
+    const value = (() => {
+      if (multiselect) {
+        return dates && dates !== DATE_DOT_FORMAT
+          ? dates.split(', ').map((date) => moment(date, DATE_DOT_FORMAT).format('YYYY-MM-DD'))
+          : [];
+      }
+
+      return dates === DATE_DOT_FORMAT
+        ? ''
+        : moment(dates, DATE_DOT_FORMAT).format('YYYY-MM-DD');
+    })();
+
+    const isValueDifferent = JSON.stringify(value) !== JSON.stringify(prevValue);
+
+    this.setState({ showContainer }, () => {
+      if (isValueDifferent) onChange({ target: { name, value } });
+    });
+  }
+
   updateIsValid() {
     const { required, valid } = this.props;
     const { dates } = this.state;
@@ -337,7 +356,6 @@ class DatePicker extends Component {
       }, () => {
         this.updateCurrentMonth(true);
         this.updateIsValid();
-        this.handleChange();
       });
     } else {
       const currentPeriod = moment();
@@ -410,6 +428,10 @@ class DatePicker extends Component {
                 name="dates"
                 disabled={disabled}
                 readOnly
+              />
+              <ClearButton
+                handler={this.handleClear}
+                isVisible={!disabled && dates !== DATE_DOT_FORMAT}
               />
             </label>
           )}
