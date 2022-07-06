@@ -566,7 +566,7 @@ class TimePicker extends Component {
           />
           <ClearButton
             handler={this.handleClear}
-            isVisible={time !== FALLBACK_TIME}
+            isVisible={!disabled && time !== FALLBACK_TIME}
           />
         </label>
         {showContainer ? (
