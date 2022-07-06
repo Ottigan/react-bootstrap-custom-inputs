@@ -10,7 +10,7 @@ const propTypes = {
   isVisible: PropTypes.bool.isRequired,
 };
 
-const ClearButton = function (props) {
+function ClearButton(props) {
   const {
     t,
     handler,
@@ -32,7 +32,7 @@ const ClearButton = function (props) {
       <FontAwesomeIcon icon={faTimes} />
     </button>
   );
-};
+}
 
 ClearButton.propTypes = propTypes;
 
