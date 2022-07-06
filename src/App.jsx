@@ -17,7 +17,7 @@ class App extends Component {
 
     this.state = {
       textValue: 'test',
-      dates: [],
+      dates: '1991-05-03',
       select: 'test10',
       time: '10:00',
     };
@@ -56,7 +56,7 @@ class App extends Component {
               list={Array.from({ length: 10 }, (_, i) => {
                 const item = {
                   key: `test${i + 1}`,
-                  value: `test${i + 1}`,
+                  value: `very long value #${i + 1}`,
                   isBackground: (i + 1) % 2 === 0,
                 };
 
@@ -65,7 +65,8 @@ class App extends Component {
               name="select"
               label={t('global.list')}
               className="col-3"
-              language="lv"
+              language="en"
+              multiselectPreview="display"
               multiselect
             />
             <DatePicker
@@ -73,7 +74,6 @@ class App extends Component {
               value={dates}
               name="dates"
               label="Dates"
-              language="lv"
               multiselect
             />
             <TimePicker

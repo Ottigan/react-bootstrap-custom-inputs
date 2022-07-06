@@ -31,6 +31,13 @@ const propTypes = {
   debounce: PropTypes.number,
   autoComplete: PropTypes.string,
   multiselect: PropTypes.bool,
+  multiselectPreview: PropTypes.oneOfType([
+    PropTypes.oneOf([
+      'default',
+      'value',
+    ]),
+    PropTypes.number,
+  ]),
   required: PropTypes.bool,
   disabled: PropTypes.bool,
   valid: PropTypes.bool,
@@ -47,6 +54,7 @@ const defaultProps = {
   debounce: 500,
   autoComplete: 'off',
   multiselect: false,
+  multiselectPreview: 'default',
   required: false,
   disabled: false,
   valid: null,
@@ -362,9 +370,8 @@ class Autocomplete extends Component {
   }
 
   updateClearButtonVisibility() {
-    const {
-      items, multiselect, disableDeselect, disabled,
-    } = this.state;
+    const { multiselect, disableDeselect, disabled } = this.props;
+    const { items } = this.state;
 
     const selected = !!Autocomplete.extractSelected(items).length;
     const isClearButtonVisible = selected && (multiselect || !disableDeselect) && !disabled;
@@ -528,13 +535,23 @@ class Autocomplete extends Component {
     const { items, showContainer } = this.state;
 
     if (!showContainer) {
-      const { t, multiselect } = this.props;
+      const { t, multiselect, multiselectPreview } = this.props;
       const selectedItems = Autocomplete.extractSelected(items);
 
       const value = selectedItems?.[0]?.value || '';
-      const filter = multiselect
-        ? t('components.autocomplete.multiselect', { count: selectedItems.length })
-        : value;
+      const filter = (() => {
+        if (multiselect) {
+          const isNumericalMatch = typeof multiselectPreview === 'number' && selectedItems.length <= multiselectPreview;
+
+          if (multiselectPreview === 'value' || isNumericalMatch) {
+            return value;
+          }
+
+          return t('components.autocomplete.multiselect', { count: selectedItems.length });
+        }
+
+        return value;
+      })();
 
       this.setState({ filter });
     }

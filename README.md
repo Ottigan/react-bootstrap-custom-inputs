@@ -60,6 +60,7 @@ export default App;
 | debounce | false | `number` representing debounce in milliseconds | 500ms |
 | autoComplete | false | 'on' or 'off' | 'off' |
 | multiselect | false | `bool` to enable the ability of selecting multiple items | false |
+| multiselectPreview | false | `number` to display values if selected count is equal or less, `'default'` to display `'Selected #'`, `'value'` to always display value | 'default' |
 | valid | false | `bool` to override default `required` with your own definition (i.e. `valid === true` when at least 3 items are selected) | - |
 | required | false | `bool` to enable Bootstrap `is-valid/is-invalid` validations | false |
 | disableDeselect | false | `bool === true` disables ability to deselect when `multiselect === false` | false |
@@ -73,7 +74,7 @@ export default App;
 | onChange | true | handler `function` | - |
 | name | true | `string` representing State property | - |
 | label | false | `string` to enable interaction with the input through it's label | - |
-| value | false | `string` or `string[]` in RFC2822 or ISO format | moment() |
+| value | false | `string` or `string[]` in RFC2822 or ISO format | 'DD.MM.YYYY' |
 | className | false | `string` consisting of classes to apply to the input| - |
 | language | false | `string` currently supported values [`en`, `lv`] | 'en' |
 | asIcon | false | `bool` to render an icon depicting a calendar instead of text input | false |
