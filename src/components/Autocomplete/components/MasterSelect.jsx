@@ -24,6 +24,7 @@ const MasterSelect = function (props) {
           name="masterSelect"
           tabIndex="-1"
           className="w-100 autocomplete-item text-start fw-bold text-truncate list-group-item"
+          data-testid="masterSelect"
         >
           {t('components.autocomplete.components.masterSelect.selectAll')}
         </button>

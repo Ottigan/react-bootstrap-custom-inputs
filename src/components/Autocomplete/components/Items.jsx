@@ -70,7 +70,7 @@ const Items = function (props) {
   if (show) {
     if (visibleItemsCount === 0) {
       return (
-        <li className="autocomplete-item text-center fw-normal list-group-item">
+        <li className="autocomplete-item text-center fw-normal list-group-item" data-testid="fallback-item">
           {t('components.autocomplete.components.items.404')}
         </li>
       );
