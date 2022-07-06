@@ -31,8 +31,10 @@ function TextInput({
   const [value, setValue, debouncedValue] = useDebounce(propsValue);
 
   useEffect(() => {
-    onChange({ target: { name, value: debouncedValue } });
-  }, [debouncedValue, name, onChange]);
+    if (propsValue !== debouncedValue) {
+      onChange({ target: { name, value: debouncedValue } });
+    }
+  }, [debouncedValue, name, onChange, propsValue]);
 
   const getValidity = useCallback((validity) => {
     if (!required || disabled) return '';
@@ -53,10 +55,11 @@ function TextInput({
           type="text"
           className={cn('form-control', getValidity(valid))}
           disabled={disabled}
+          data-testid="input"
         />
         <ClearButton
           handler={() => setValue('')}
-          isVisible={!!value.length}
+          isVisible={!disabled && !!value.length}
         />
       </label>
     </div>
