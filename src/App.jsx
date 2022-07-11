@@ -19,10 +19,16 @@ class App extends Component {
       textValue: 'test',
       dates: '1991-05-03',
       select: 'test10',
-      time: '10:00',
+      time: '',
     };
 
     this.handleChange = this.handleChange.bind(this);
+  }
+
+  componentDidMount() {
+    setTimeout(() => {
+      this.setState({ time: '18:00' });
+    }, 3000);
   }
 
   handleChange(e) {

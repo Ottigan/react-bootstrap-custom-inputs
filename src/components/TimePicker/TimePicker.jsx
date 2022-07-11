@@ -166,11 +166,20 @@ class TimePicker extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { valid: prevValid } = prevProps;
-    const { valid: currValid } = this.props;
+    const {
+      value: prevValue,
+      name: prevName,
+      valid: prevValid,
+    } = prevProps;
 
-    if (prevValid !== currValid) {
-      this.updateIsValid();
+    const {
+      value: currValue,
+      name: currName,
+      valid: currValid,
+    } = this.props;
+
+    if (prevValue !== currValue || prevName !== currName || prevValid !== currValid) {
+      this.initialize();
     }
   }
 
@@ -570,6 +579,7 @@ class TimePicker extends Component {
             type="text"
             name="time"
             data-name="time"
+            data-testid="input"
             disabled={disabled}
           />
           <ClearButton
