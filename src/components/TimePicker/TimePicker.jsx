@@ -100,11 +100,11 @@ const MINUTES_24H_FORMAT = [
 
 const FALLBACK_TIME = '--:--';
 
-function updateChecked(object, target) {
+function updateChecked({ object, target, reset = false }) {
   return Object.keys(object).reduce((acc, x) => {
-    if (x === target) return { ...acc, [x]: true };
+    if (reset || x !== target) return { ...acc, [x]: false };
 
-    return { ...acc, [x]: false };
+    return { ...acc, [x]: true };
   }, {});
 }
 
@@ -332,8 +332,8 @@ class TimePicker extends Component {
 
       const actualValue = timeArr.join('');
       const [hour, minute] = actualValue.split(':');
-      const updatedHours = updateChecked(hours, hour);
-      const updatedMinutes = updateChecked(minutes, minute);
+      const updatedHours = updateChecked({ object: hours, target: hour });
+      const updatedMinutes = updateChecked({ object: minutes, target: minute });
 
       this.setState({
         [name]: actualValue,
@@ -356,7 +356,7 @@ class TimePicker extends Component {
     const { name, value } = e.target;
 
     if (name === 'hour') {
-      const updatedHours = updateChecked(hours, value);
+      const updatedHours = updateChecked({ object: hours, target: value });
       const time = `${value}:${minute}`;
 
       this.setState({
@@ -365,7 +365,7 @@ class TimePicker extends Component {
         hours: updatedHours,
       }, () => this.updateIsValid(true));
     } else if (name === 'minute') {
-      const updatedMinutes = updateChecked(minutes, value);
+      const updatedMinutes = updateChecked({ object: minutes, target: value });
       const time = `${hour}:${value}`;
 
       this.setState({
@@ -394,10 +394,18 @@ class TimePicker extends Component {
 
   handleClear(e) {
     e.stopPropagation();
+    const { hours: prevHours, minutes: prevMinutes } = this.state;
+    const hours = updateChecked({ object: prevHours, reset: true });
+    const minutes = updateChecked({ object: prevMinutes, reset: true });
 
     this.setState({
       time: FALLBACK_TIME,
-    }, () => this.updateParent(false));
+      hours,
+      minutes,
+    }, () => {
+      this.updateIsValid();
+      this.updateParent(false);
+    });
   }
 
   handleBlur(e) {
