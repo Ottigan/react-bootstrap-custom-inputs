@@ -10,6 +10,7 @@ const propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string,
   value: PropTypes.string,
+  debounce: PropTypes.number,
   className: PropTypes.string,
   valid: PropTypes.bool,
   required: PropTypes.bool,
@@ -19,6 +20,7 @@ const propTypes = {
 const defaultProps = {
   label: '',
   value: '',
+  debounce: 500,
   className: '',
   valid: null,
   required: false,
@@ -26,19 +28,17 @@ const defaultProps = {
 };
 
 function TextInput({
-  value: propsValue, onChange, name, label, className, valid, required, disabled,
+  value: propsValue, onChange, debounce, name, label, className, valid, required, disabled,
 }) {
-  const [value, setValue, debouncedValue] = useDebounce('');
+  const [value, setValue, debouncedValue] = useDebounce(propsValue, debounce);
 
   useEffect(() => {
     setValue(propsValue);
   }, [propsValue, setValue]);
 
   useEffect(() => {
-    if (propsValue !== debouncedValue) {
-      onChange({ target: { name, value: debouncedValue } });
-    }
-  }, [debouncedValue, name, onChange, propsValue]);
+    onChange({ target: { name, value: debouncedValue } });
+  }, [debouncedValue, name, onChange]);
 
   const getValidity = useCallback((validity) => {
     if (!required || disabled) return '';

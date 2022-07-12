@@ -106,6 +106,7 @@ export default App;
 | name | true | `string` representing State property | - |
 | label | false | `string` to enable interaction with the input through it's label | - |
 | value | false | `string` | '' |
+| debounce | false | `number` representing debounce in milliseconds | 500ms |
 | className | false | `string` | - |
 | valid | false | `bool` | - |
 | required | false | `bool` | false |

@@ -26,9 +26,8 @@ class App extends Component {
   }
 
   componentDidMount() {
-    setTimeout(() => {
-      this.setState({ time: '18:00' });
-    }, 3000);
+    setTimeout(() => this.setState({ time: '18:00' }), 3000);
+    setTimeout(() => this.setState({ textValue: 'foo' }), 3000);
   }
 
   handleChange(e) {
@@ -41,10 +40,11 @@ class App extends Component {
   }
 
   render() {
+    const { t } = this.props;
+
     const {
       textValue, dates, select, time,
     } = this.state;
-    const { t } = this.props;
 
     return (
       <div className="container-fluid vh-100">
@@ -53,7 +53,7 @@ class App extends Component {
             <TextInput
               onChange={this.handleChange}
               value={textValue}
-              name={textValue}
+              name="textValue"
               label={t('global.textInput')}
             />
             <Autocomplete
@@ -64,6 +64,10 @@ class App extends Component {
                   key: `test${i + 1}`,
                   value: `very long value #${i + 1}`,
                   isBackground: (i + 1) % 2 === 0,
+                  children: [{
+                    key: 'test343',
+                    value: 'nested value',
+                  }],
                 };
 
                 return item;
@@ -71,7 +75,7 @@ class App extends Component {
               name="select"
               label={t('global.list')}
               className="col-3"
-              language="en"
+              language="lv"
               multiselectPreview="default"
               multiselect
             />
