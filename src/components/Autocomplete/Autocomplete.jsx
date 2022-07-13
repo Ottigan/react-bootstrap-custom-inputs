@@ -200,6 +200,7 @@ class Autocomplete extends Component {
       name: prevName,
       list: prevList,
       valid: prevValid,
+      disabled: prevDisabled,
       language: prevLanguage,
     } = prevProps;
 
@@ -208,6 +209,7 @@ class Autocomplete extends Component {
       name: currName,
       list: currList,
       valid: currValid,
+      disabled: currDisabled,
       language: currLanguage,
     } = this.props;
 
@@ -215,6 +217,7 @@ class Autocomplete extends Component {
       || prevName !== currName
       || JSON.stringify(prevList) !== JSON.stringify(currList)
       || prevValid !== currValid
+      || prevDisabled !== currDisabled
       || prevLanguage !== currLanguage
     ) {
       this.initialize();
