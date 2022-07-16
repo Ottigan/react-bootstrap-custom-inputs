@@ -59,11 +59,10 @@ class App extends Component {
             <Autocomplete
               onChange={this.handleChange}
               value={select}
-              list={Array.from({ length: 10 }, (_, i) => {
+              list={Array.from({ length: 9 }, (_, i) => {
                 const item = {
                   key: `test${i + 1}`,
                   value: `very long value #${i + 1}`,
-                  isBackground: (i + 1) % 2 === 0,
                   children: [{
                     key: 'test343',
                     value: 'nested value',
@@ -76,8 +75,7 @@ class App extends Component {
               label={t('global.list')}
               className="col-3"
               language="lv"
-              multiselectPreview="default"
-              multiselect
+              required
             />
             <DatePicker
               onChange={this.handleChange}

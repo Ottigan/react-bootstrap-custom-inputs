@@ -481,8 +481,11 @@ class Autocomplete extends Component {
     const {
       value, list, valid, i18n, language,
     } = this.props;
+    const { showContainer } = this.state;
+
     i18n.changeLanguage(language);
 
+    let isSomeSelected = false;
     let areAllSelected = true;
 
     function formatItems(items = []) {
@@ -493,6 +496,7 @@ class Autocomplete extends Component {
           ? value.some((key) => key === item.key)
           : value === item.key;
 
+        if (isSelected) isSomeSelected = true;
         if (!isSelected) areAllSelected = false;
 
         const updatedItem = Autocomplete.updateItemsIsVisible({
@@ -531,6 +535,7 @@ class Autocomplete extends Component {
     }, () => {
       this.renderSelectedPreview();
       this.updateClearButtonVisibility();
+      if (!isSomeSelected) this.updateParent(showContainer);
     });
   }
 
