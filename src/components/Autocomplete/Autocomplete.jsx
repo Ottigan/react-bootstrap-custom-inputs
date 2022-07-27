@@ -202,6 +202,7 @@ class Autocomplete extends Component {
       valid: prevValid,
       disabled: prevDisabled,
       language: prevLanguage,
+      required: prevRequired,
     } = prevProps;
 
     const {
@@ -211,6 +212,7 @@ class Autocomplete extends Component {
       valid: currValid,
       disabled: currDisabled,
       language: currLanguage,
+      required: currRequired,
     } = this.props;
 
     if (prevValue !== currValue
@@ -219,6 +221,7 @@ class Autocomplete extends Component {
       || prevValid !== currValid
       || prevDisabled !== currDisabled
       || prevLanguage !== currLanguage
+      || prevRequired !== currRequired
     ) {
       this.initialize();
     }

@@ -43,4 +43,40 @@ describe('DatePicker', () => {
 
     expect(screen.getByTestId(highlightDate)).toHaveStyle({ 'background-color': highlightColor });
   });
+
+  it('should update validity classes', () => {
+    const handler = jest.fn();
+    const name = 'test';
+    const value = '2022-07-27';
+
+    const { rerender } = render(<DatePicker
+      onChange={handler}
+      value={value}
+      name={name}
+      required
+    />);
+
+    expect(screen.getByTestId('input')).toHaveClass('is-valid');
+
+    rerender(<DatePicker
+      onChange={handler}
+      value={value}
+      name={name}
+      required
+      valid={false}
+    />);
+
+    expect(screen.getByTestId('input')).not.toHaveClass('is-valid');
+    expect(screen.getByTestId('input')).toHaveClass('is-invalid');
+
+    rerender(<DatePicker
+      onChange={handler}
+      value={value}
+      name={name}
+      valid={false}
+    />);
+
+    expect(screen.getByTestId('input')).not.toHaveClass('is-valid');
+    expect(screen.getByTestId('input')).not.toHaveClass('is-invalid');
+  });
 });
