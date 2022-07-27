@@ -1,4 +1,4 @@
-import TextInput from './TextInput';
+import TextInput from './index';
 
 export default {
   title: 'TextInput',
@@ -31,7 +31,7 @@ export default {
       table: { defaultValue: { summary: 0 }, category: 'optional' },
     },
     className: {
-      description: 'Passes classNames to the component',
+      description: 'Passes classes to the component',
       type: { name: 'string', required: false },
       table: { defaultValue: { summary: '' }, category: 'optional' },
     },
