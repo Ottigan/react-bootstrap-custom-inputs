@@ -1,101 +1,83 @@
-import { Component } from 'react';
 import PropTypes from 'prop-types';
+import { useCallback, useEffect, useState } from 'react';
 import { withTranslation } from 'react-i18next';
 import Autocomplete from './components/Autocomplete';
 import DatePicker from './components/DatePicker';
-import TimePicker from './components/TimePicker';
 import TextInput from './components/TextInput/TextInput';
+import TimePicker from './components/TimePicker';
 // import { Autocomplete, DatePicker, TimePicker } from '../dist';
 
 const propTypes = {
   t: PropTypes.func.isRequired,
 };
 
-class App extends Component {
-  constructor(props) {
-    super(props);
+function App({ t }) {
+  const [text, setText] = useState('Random text...');
+  const [dates, setDates] = useState('2021-01-31');
+  const [select, setSelect] = useState('test10');
+  const [time, setTime] = useState('');
 
-    this.state = {
-      textValue: 'test',
-      dates: '1991-05-03',
-      select: 'test10',
-      time: '',
-    };
+  useEffect(() => {
+    setTimeout(() => setTime('18:00'), 3000);
+    setTimeout(() => setText('foo'), 3000);
+  }, []);
 
-    this.handleChange = this.handleChange.bind(this);
-  }
+  const handleText = useCallback(({ target: { value } }) => setText(value), []);
+  const handleDates = useCallback(({ target: { value } }) => setDates(value), []);
+  const handleSelect = useCallback(({ target: { value } }) => setSelect(value), []);
+  const handleTime = useCallback(({ target: { value } }) => setTime(value), []);
 
-  componentDidMount() {
-    setTimeout(() => this.setState({ time: '18:00' }), 3000);
-    setTimeout(() => this.setState({ textValue: 'foo' }), 3000);
-  }
+  return (
+    <div className="container-fluid vh-100">
+      <form className="row justify-content-center align-items-center h-100">
+        <div className="d-flex justify-content-around align-items-end">
+          <TextInput
+            onChange={handleText}
+            value={text}
+            name="textValue"
+            label={t('global.textInput')}
+          />
+          <Autocomplete
+            onChange={handleSelect}
+            value={select}
+            list={Array.from({ length: 10 }, (_, i) => {
+              const item = {
+                key: `test${i + 1}`,
+                value: `very long value #${i + 1}`,
+                children: [{
+                  key: 'test343',
+                  value: 'nested value',
+                }],
+              };
 
-  handleChange(e) {
-    const { name, type, value } = e.target;
-    const actualValue = type === 'radio' ? value !== 'false' : value;
-
-    this.setState({
-      [name]: actualValue,
-    });
-  }
-
-  render() {
-    const { t } = this.props;
-
-    const {
-      textValue, dates, select, time,
-    } = this.state;
-
-    return (
-      <div className="container-fluid vh-100">
-        <form className="row justify-content-center align-items-center h-100">
-          <div className="d-flex justify-content-around align-items-end">
-            <TextInput
-              onChange={this.handleChange}
-              value={textValue}
-              name="textValue"
-              label={t('global.textInput')}
-            />
-            <Autocomplete
-              onChange={this.handleChange}
-              value={select}
-              list={Array.from({ length: 9 }, (_, i) => {
-                const item = {
-                  key: `test${i + 1}`,
-                  value: `very long value #${i + 1}`,
-                  children: [{
-                    key: 'test343',
-                    value: 'nested value',
-                  }],
-                };
-
-                return item;
-              })}
-              name="select"
-              label={t('global.list')}
-              className="col-3"
-              language="lv"
-              required
-            />
-            <DatePicker
-              onChange={this.handleChange}
-              value={dates}
-              name="dates"
-              label="Dates"
-              multiselect
-            />
-            <TimePicker
-              onChange={this.handleChange}
-              value={time}
-              name="time"
-              label="Time"
-              className="col-2"
-            />
-          </div>
-        </form>
-      </div>
-    );
-  }
+              return item;
+            })}
+            name="select"
+            label={t('global.list')}
+            className="col-3"
+            language="lv"
+            required
+          />
+          <DatePicker
+            onChange={handleDates}
+            value={dates}
+            name="dates"
+            label="Dates"
+            highlightDate="2022-07-28"
+            highlightColor="#00000044"
+            multiselect
+          />
+          <TimePicker
+            onChange={handleTime}
+            value={time}
+            name="time"
+            label="Time"
+            className="col-2"
+          />
+        </div>
+      </form>
+    </div>
+  );
 }
 
 App.propTypes = propTypes;

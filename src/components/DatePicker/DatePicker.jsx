@@ -1,10 +1,10 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleLeft, faAngleRight, faCalendar } from '@fortawesome/free-solid-svg-icons';
-import { Component, createRef } from 'react';
-import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
-import moment from 'moment';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ClearButton from 'components/ClearButton';
+import moment from 'moment';
+import PropTypes from 'prop-types';
+import { Component, createRef } from 'react';
+import { withTranslation } from 'react-i18next';
 import { uuidv4 } from '../../helpers/idGenerators';
 import './styles.scss';
 
@@ -29,7 +29,6 @@ const propTypes = {
   t: PropTypes.func.isRequired,
   i18n: PropTypes.shape().isRequired,
   onChange: PropTypes.func.isRequired,
-  label: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   value: PropTypes.oneOfType([
     PropTypes.string,
@@ -37,10 +36,14 @@ const propTypes = {
     PropTypes.instanceOf(Date),
     PropTypes.instanceOf(moment),
   ]),
+  label: PropTypes.string,
+  highlightDate: PropTypes.string,
+  highlightColor: PropTypes.string,
   className: PropTypes.string,
   language: PropTypes.string,
   multiselect: PropTypes.bool,
   required: PropTypes.bool,
+  alignment: PropTypes.oneOf(['left', 'right']),
   asIcon: PropTypes.bool,
   valid: PropTypes.bool,
   disabled: PropTypes.bool,
@@ -48,6 +51,10 @@ const propTypes = {
 
 const defaultProps = {
   value: '',
+  label: '',
+  alignment: 'left',
+  highlightDate: '',
+  highlightColor: '',
   multiselect: false,
   className: '',
   language: '',
@@ -70,6 +77,8 @@ class DatePicker extends Component {
       trackableDates: {},
       currentMonth: [],
       showContainer: false,
+      highlightDate: null,
+      highlightColor: '',
       isValid: null,
     };
 
@@ -87,16 +96,31 @@ class DatePicker extends Component {
 
   componentDidUpdate(prevProps) {
     const {
-      value: prevValue, valid: prevValid, name: prevName, language: prevLanguage,
+      value: prevValue,
+      valid: prevValid,
+      name: prevName,
+      language: prevLanguage,
+      highlightColor: prevColor,
+      highlightDate: prevDate,
     } = prevProps;
+
     const {
-      value: currValue, valid: currValid, name: currName, language: currLanguage,
+      value: currValue,
+      valid: currValid,
+      name: currName,
+      language: currLanguage,
+      highlightColor: currColor,
+      highlightDate: currDate,
     } = this.props;
 
     const isValueSame = prevValue.length === currValue.length
     && JSON.stringify(prevValue) === JSON.stringify(currValue);
 
-    if (!isValueSame || prevName !== currName || prevLanguage !== currLanguage) {
+    if (!isValueSame
+        || prevName !== currName
+        || prevLanguage !== currLanguage
+        || prevColor !== currColor
+        || prevDate !== currDate) {
       this.initialize();
     } else if (prevValid !== currValid) {
       this.updateIsValid();
@@ -321,6 +345,21 @@ class DatePicker extends Component {
     });
   }
 
+  validateHiglightData() {
+    const { highlightDate, highlightColor } = this.props;
+
+    const isHighligthDateValid = moment(highlightDate).isValid();
+    const isHighligthColorHex = /#([0-9]|[a-f]){6,8}/i.test(highlightColor);
+    const isHighlightValid = isHighligthDateValid && isHighligthColorHex;
+
+    if (isHighlightValid) {
+      this.setState({
+        highlightDate: moment(highlightDate).format('YYYY-MM-DD'),
+        highlightColor,
+      });
+    }
+  }
+
   updateIsValid() {
     const { required, valid } = this.props;
     const { dates } = this.state;
@@ -336,6 +375,7 @@ class DatePicker extends Component {
 
   initialize() {
     const { value, i18n, language } = this.props;
+
     i18n.changeLanguage(language);
     moment.updateLocale('en', { week: { dow: 1 } });
 
@@ -355,6 +395,7 @@ class DatePicker extends Component {
         dates,
       }, () => {
         this.updateCurrentMonth(true);
+        this.validateHiglightData();
         this.updateIsValid();
       });
     } else {
@@ -365,6 +406,7 @@ class DatePicker extends Component {
         dates: DATE_DOT_FORMAT,
       }, () => {
         this.updateCurrentMonth(true);
+        this.validateHiglightData();
         this.updateIsValid();
       });
     }
@@ -374,12 +416,14 @@ class DatePicker extends Component {
     const {
       inputRef,
       btnRef,
-      showContainer,
       dates,
+      isValid,
+      showContainer,
       trackableDates,
       currentMonth,
+      highlightDate,
+      highlightColor,
       formattedCurrentPeriod,
-      isValid,
     } = this.state;
 
     const {
@@ -388,6 +432,7 @@ class DatePicker extends Component {
       name,
       asIcon,
       disabled,
+      alignment,
       className,
     } = this.props;
 
@@ -401,8 +446,14 @@ class DatePicker extends Component {
       return 'bg-white is-invalid';
     }
 
+    function getContainerStyles() {
+      if (alignment === 'left') return { left: 0 };
+
+      return { right: 0 };
+    }
+
     return (
-      <span key={`date-picker-${name}`} onFocus={this.handleFocus} onBlur={this.handleBlur} className={`date-picker-component ${className}`}>
+      <div key={`date-picker-${name}`} onFocus={this.handleFocus} onBlur={this.handleBlur} className={`date-picker-component ${className} ${asIcon ? 'd-inline' : ''}`}>
         {asIcon
           ? (
             <button
@@ -427,6 +478,7 @@ class DatePicker extends Component {
                 type="text"
                 name="dates"
                 disabled={disabled}
+                data-testid="input"
                 readOnly
               />
               <ClearButton
@@ -436,7 +488,7 @@ class DatePicker extends Component {
             </label>
           )}
         {showContainer ? (
-          <div className="date-picker-container">
+          <div className="date-picker-container" style={getContainerStyles()}>
             <table tabIndex="-1" className="date-picker-table table">
               <thead className="table-dark">
                 <tr>
@@ -479,12 +531,13 @@ class DatePicker extends Component {
               <tbody>
                 {currentMonth.map((week) => {
                   const trKey = `week${JSON.stringify(week)}`;
+
                   const formattedWeek = week.map((day) => {
                     const tdKey = day ? `day${day}` : uuidv4();
 
                     if (day) {
-                      const longDay = day.format('YYYY-MM-DD');
-                      const checked = trackableDates[longDay];
+                      const date = day.format('YYYY-MM-DD');
+                      const checked = trackableDates[date];
                       const shortDay = day.format('D');
                       const isToday = day.isSame(moment().startOf('day'));
 
@@ -497,12 +550,19 @@ class DatePicker extends Component {
                       })();
 
                       return (
-                        <td key={shortDay} className={tdClassName}>
+                        <td
+                          key={shortDay}
+                          className={tdClassName}
+                          style={{
+                            backgroundColor: highlightDate === date && !isToday && highlightColor,
+                          }}
+                          data-testid={date}
+                        >
                           {shortDay}
                           <input
                             onChange={this.handleChecked}
                             checked={checked}
-                            name={longDay}
+                            name={date}
                             type="checkbox"
                             tabIndex="-1"
                             className="date-picker-checkbox form-check-input"
@@ -519,7 +579,7 @@ class DatePicker extends Component {
             </table>
           </div>
         ) : null}
-      </span>
+      </div>
     );
   }
 }

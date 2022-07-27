@@ -3,9 +3,38 @@
 A library providing great looking input elements for projects using [React](https://reactjs.org/) with [Bootstrap](https://getbootstrap.com/).
 
 ## Interactive sandbox(Storybook) to test out the components
-[react-bci.vercel.app](https://react-cbi.vercel.app)
+[react-bci.vercel.app](https://react-bci.vercel.app)
 
-## Import components:
+## Usage examples:
+
+### With Hooks
+```
+import { useState } from 'react';
+import DatePicker from 'react-bootstrap-custom-inputs';
+
+function App() {
+  const [date, setDate] = useState('2021-01-31');
+
+  const handleDate = useCallback(({ target: { value } }) => setDate(value), []);
+
+  return (
+    <div className="container-fluid vh-100">
+      <div className="row h-75 justify-content-center align-items-center">
+        <DatePicker
+          onChange={handleDate}
+          value={date}
+          label="Date"
+          required
+          className="col-4"
+        />
+      </div>
+    </div>
+  );
+}
+
+export default App;
+```
+### With Class
 ```
 import React, { Component } from 'react';
 import { DatePicker } from 'react-bootstrap-custom-inputs';
@@ -82,7 +111,10 @@ export default App;
 | value | false | `string` or `string[]` in RFC2822 or ISO format | 'DD.MM.YYYY' |
 | className | false | `string` consisting of classes to apply to the input| - |
 | language | false | `string` currently supported values [`en`, `lv`] | 'en' |
+| highlightDate | false | `string` in RFC2822 or ISO format | '' |
+| highlightColor | false | `string` describing color in hexadecimal | '' |
 | asIcon | false | `bool` to render an icon depicting a calendar instead of text input | false |
+| alignment | false | `string` controlling expanded calendar alignment [`left`, `right`] | 'left' |
 | multiselect | false | `bool` | false |
 | valid | false | `bool` | - |
 | required | false | `bool` | false |

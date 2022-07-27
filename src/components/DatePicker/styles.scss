@@ -11,14 +11,6 @@ $today-color: hsl(219, 46%, 20%);
     pointer-events: none;
   }
 
-  .date-picker-toggler + .date-picker-container {
-    right: 0;
-  }
-
-  .date-picker-input + .date-picker-container {
-    left: 0;
-  }
-
   .date-picker-container {
     position: absolute;
     margin-top: 10px;
