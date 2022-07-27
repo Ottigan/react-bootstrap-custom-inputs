@@ -89,14 +89,14 @@ export default {
     name: 'date',
     label: 'DatePicker',
     value: '2022-07-27',
-    className: 'col-2',
-    valid: null,
+    className: '',
     highlightDate: '',
     highlightColor: '',
-    asIcon: false,
+    valid: null,
     multiselect: false,
     required: false,
     disabled: false,
+    asIcon: false,
   },
 };
 

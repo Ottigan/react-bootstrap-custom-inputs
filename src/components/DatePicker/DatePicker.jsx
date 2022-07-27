@@ -96,21 +96,23 @@ class DatePicker extends Component {
 
   componentDidUpdate(prevProps) {
     const {
+      name: prevName,
       value: prevValue,
       valid: prevValid,
-      name: prevName,
       language: prevLanguage,
       highlightColor: prevColor,
       highlightDate: prevDate,
+      required: prevRequired,
     } = prevProps;
 
     const {
+      name: currName,
       value: currValue,
       valid: currValid,
-      name: currName,
       language: currLanguage,
       highlightColor: currColor,
       highlightDate: currDate,
+      required: currRequired,
     } = this.props;
 
     const isValueSame = prevValue.length === currValue.length
@@ -122,7 +124,7 @@ class DatePicker extends Component {
         || prevColor !== currColor
         || prevDate !== currDate) {
       this.initialize();
-    } else if (prevValid !== currValid) {
+    } else if (prevValid !== currValid || prevRequired !== currRequired) {
       this.updateIsValid();
     }
   }
@@ -370,6 +372,8 @@ class DatePicker extends Component {
       } else {
         this.setState({ isValid: valid });
       }
+    } else {
+      this.setState({ isValid: null });
     }
   }
 

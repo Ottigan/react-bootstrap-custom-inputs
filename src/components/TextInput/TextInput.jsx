@@ -38,8 +38,10 @@ function TextInput({
   }, [propsValue, setValue]);
 
   useEffect(() => {
-    onChange({ target: { name, value: debouncedValue } });
-  }, [debouncedValue, name, onChange]);
+    if (propsValue !== debouncedValue) {
+      onChange({ target: { name, value: debouncedValue } });
+    }
+  }, [debounce, debouncedValue, name, onChange, propsValue]);
 
   useEffect(() => {
     const hasValue = !!debouncedValue.length;

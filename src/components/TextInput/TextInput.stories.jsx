@@ -56,7 +56,7 @@ export default {
     label: 'TextInput',
     value: 'Random text...',
     debounce: 0,
-    className: 'col-2',
+    className: '',
     valid: null,
     required: false,
     disabled: false,
