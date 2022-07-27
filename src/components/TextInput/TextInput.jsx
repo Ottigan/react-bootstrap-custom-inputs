@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import ClearButton from 'components/ClearButton';
 import cn from 'classnames';
 import './styles.scss';
@@ -20,7 +20,7 @@ const propTypes = {
 const defaultProps = {
   label: '',
   value: '',
-  debounce: 500,
+  debounce: 0,
   className: '',
   valid: null,
   required: false,
@@ -31,6 +31,7 @@ function TextInput({
   value: propsValue, onChange, debounce, name, label, className, valid, required, disabled,
 }) {
   const [value, setValue, debouncedValue] = useDebounce(propsValue, debounce);
+  const [isValid, setIsValid] = useState(false);
 
   useEffect(() => {
     setValue(propsValue);
@@ -39,6 +40,15 @@ function TextInput({
   useEffect(() => {
     onChange({ target: { name, value: debouncedValue } });
   }, [debouncedValue, name, onChange]);
+
+  useEffect(() => {
+    const hasValue = !!debouncedValue.length;
+    const validity = valid === null
+      ? hasValue
+      : valid;
+
+    setIsValid(validity);
+  }, [debouncedValue, valid]);
 
   const getValidity = useCallback((validity) => {
     if (!required || disabled) return '';
@@ -57,7 +67,7 @@ function TextInput({
           value={value}
           name={name}
           type="text"
-          className={cn('form-control', getValidity(valid))}
+          className={cn('form-control', getValidity(isValid))}
           disabled={disabled}
           data-testid="input"
         />

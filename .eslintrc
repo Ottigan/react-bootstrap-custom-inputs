@@ -37,6 +37,8 @@
     "no-mixed-operators": "off",
     "quote-props": ["error", "as-needed"],
     "func-names": "off",
+    "react/jsx-props-no-spreading": "off",
+    "import/prefer-default-export": "off",
     "jest/no-disabled-tests": "warn",
     "jest/no-focused-tests": "error",
     "jest/no-identical-title": "error",
