@@ -1,12 +1,14 @@
 name: CI publish storybook
 
 on:
-  push:
-    branches: [dev]
+  workflow_run:
+    workflows: ['CI test']
+    types: [completed]
 
 jobs:
   publish:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
       - uses: actions/checkout@v3
@@ -22,4 +24,5 @@ jobs:
           vercel-token: ${{ secrets.VERCEL_TOKEN }} # Required
           vercel-org-id: ${{ secrets.ORG_ID}}  #Required
           vercel-project-id: ${{ secrets.PROJECT_ID}} #Required 
+          vercel-args: '--prod'
           working-directory: ./storybook-static
