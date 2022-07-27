@@ -1,5 +1,10 @@
 # React Bootstrap Custom Inputs
 
+A library providing great looking input elements for projects using [React](https://reactjs.org/) with [Bootstrap](https://getbootstrap.com/).
+
+## Interactive sandbox(Storybook) to test out the components
+[react-bci.vercel.app](https://react-cbi.vercel.app)
+
 ## Import components:
 ```
 import React, { Component } from 'react';

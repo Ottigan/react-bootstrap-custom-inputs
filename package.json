@@ -1,6 +1,6 @@
 {
   "name": "react-bootstrap-custom-inputs",
-  "version": "1.8.8",
+  "version": "1.8.9",
   "private": false,
   "description": "React compatible inputs adhering to Bootstrap theme.",
   "keywords": [
@@ -9,6 +9,7 @@
     "bootstrap",
     "ui"
   ],
+  "homepage": "https://react-bci.vercel.app",
   "repository": {
     "type": "git",
     "url": "https://github.com/Ottigan/react-bootstrap-custom-inputs"
