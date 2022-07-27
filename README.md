@@ -34,7 +34,7 @@ function App() {
 
 export default App;
 ```
-### With Class
+### With Classes
 ```
 import React, { Component } from 'react';
 import { DatePicker } from 'react-bootstrap-custom-inputs';
