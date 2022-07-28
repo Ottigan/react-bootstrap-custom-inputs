@@ -63,7 +63,7 @@ function App({ t }) {
             value={dates}
             name="dates"
             label="Dates"
-            highlightDate="2022-07-28"
+            highlightDate="2022-07-26"
             highlightColor="#00000044"
             multiselect
           />

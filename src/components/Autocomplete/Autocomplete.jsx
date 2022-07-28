@@ -215,7 +215,7 @@ class Autocomplete extends Component {
       required: currRequired,
     } = this.props;
 
-    if (prevValue !== currValue
+    if (JSON.stringify(prevValue) !== JSON.stringify(currValue)
       || prevName !== currName
       || JSON.stringify(prevList) !== JSON.stringify(currList)
       || prevValid !== currValid
