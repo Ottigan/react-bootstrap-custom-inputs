@@ -1,6 +1,7 @@
 import '@testing-library/jest-dom/extend-expect';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { act } from 'react-dom/test-utils';
 import '../../middleware/i18nDev';
 import DatePicker from './DatePicker';
 
@@ -28,8 +29,8 @@ describe('DatePicker', () => {
     const handler = jest.fn();
     const name = 'test';
     const value = '2022-07-27';
-    const highlightDate = '2022-07-28';
-    const highlightColor = '#00000044';
+    const highlightDate = '2022-07-24';
+    const highlightColor = '#9e313144';
 
     render(<DatePicker
       onChange={handler}
@@ -39,9 +40,10 @@ describe('DatePicker', () => {
       highlightColor={highlightColor}
     />);
 
-    userEvent.click(screen.getByTestId('input'));
+    act(() => userEvent.click(screen.getByTestId('input')));
+    const element = screen.getByTestId(highlightDate);
 
-    expect(screen.getByTestId(highlightDate)).toHaveStyle({ 'background-color': highlightColor });
+    expect(element).toHaveStyle({ 'background-color': highlightColor });
   });
 
   it('should update validity classes', () => {

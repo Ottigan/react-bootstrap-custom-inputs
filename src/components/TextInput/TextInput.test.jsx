@@ -1,14 +1,7 @@
 import '@testing-library/jest-dom/extend-expect';
-import {
-  render, screen, waitFor, act,
-} from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import TextInput from './TextInput';
-
-beforeEach(() => {
-  jest.useFakeTimers();
-  jest.clearAllMocks();
-});
 
 describe('TextInput', () => {
   it('should render correctly', () => {
@@ -26,17 +19,14 @@ describe('TextInput', () => {
     const handler = jest.fn();
     const value = '';
 
-    act(() => {
-      render(<TextInput
-        onChange={handler}
-        name={name}
-        value={value}
-      />);
-    });
+    const { unmount } = render(<TextInput
+      onChange={handler}
+      name={name}
+      value={value}
+    />);
 
     const input = screen.getByTestId('input');
     const inputText = 'my cats name is Kurama';
-    userEvent.type(input, inputText);
 
     const expectedArgument = {
       target: {
@@ -45,7 +35,10 @@ describe('TextInput', () => {
       },
     };
 
+    userEvent.type(input, inputText);
     await waitFor(() => expect(handler).toBeCalledWith(expectedArgument));
+
+    unmount();
   });
 
   it('should apply the correct validity classes', () => {
