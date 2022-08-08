@@ -66,6 +66,7 @@ function App({ t }) {
             highlightDate="2022-07-26"
             highlightColor="#00000044"
             multiselect
+            required
           />
           <TimePicker
             onChange={handleTime}

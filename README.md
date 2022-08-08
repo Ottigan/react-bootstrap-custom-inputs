@@ -119,6 +119,7 @@ export default App;
 | valid | false | `bool` | - |
 | required | false | `bool` | false |
 | disabled | false | `bool` | false |
+| disableDeselect | false | `bool === true` disables ability to deselect when `multiselect === false` | false |
 
 <p>&nbsp;</p>
 
@@ -133,6 +134,7 @@ export default App;
 | valid | false | `bool` | - |
 | required | false | `bool` | false |
 | disabled | false | `bool` | false |
+| disableDeselect | false | `bool === true` disables ability to deselect when `multiselect === false` | false |
 
 <p>&nbsp;</p>
 

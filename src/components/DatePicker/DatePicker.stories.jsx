@@ -64,15 +64,15 @@ export default {
       table: { defaultValue: { summary: '`left`' }, category: 'optional' },
       control: { type: 'select', options: ['left', 'right'] },
     },
-    asIcon: {
-      description: 'Display component as icon opposed to input field',
-      type: { name: 'boolean', required: false },
-      table: { defaultValue: { summary: false }, category: 'optional' },
-    },
     valid: {
       description: 'Overrides default validity if `required` prop is set to `true`',
       type: { name: 'boolean', required: false },
       table: { defaultValue: { summary: 'null' }, category: 'optional' },
+    },
+    asIcon: {
+      description: 'Display component as icon opposed to input field',
+      type: { name: 'boolean', required: false },
+      table: { defaultValue: { summary: false }, category: 'optional' },
     },
     required: {
       description: '',
@@ -80,6 +80,11 @@ export default {
       table: { defaultValue: { summary: 'false' }, category: 'optional' },
     },
     disabled: {
+      description: '',
+      type: { name: 'boolean', required: false },
+      table: { defaultValue: { summary: 'false' }, category: 'optional' },
+    },
+    disableDeselect: {
       description: '',
       type: { name: 'boolean', required: false },
       table: { defaultValue: { summary: 'false' }, category: 'optional' },
@@ -93,10 +98,11 @@ export default {
     highlightDate: '',
     highlightColor: '',
     valid: null,
+    asIcon: false,
     multiselect: false,
     required: false,
     disabled: false,
-    asIcon: false,
+    disableDeselect: false,
   },
 };
 

@@ -47,6 +47,7 @@ const propTypes = {
   asIcon: PropTypes.bool,
   valid: PropTypes.bool,
   disabled: PropTypes.bool,
+  disableDeselect: PropTypes.bool,
 };
 
 const defaultProps = {
@@ -62,6 +63,7 @@ const defaultProps = {
   asIcon: false,
   valid: null,
   disabled: false,
+  disableDeselect: false,
 };
 
 class DatePicker extends Component {
@@ -418,6 +420,17 @@ class DatePicker extends Component {
 
   render() {
     const {
+      t,
+      label,
+      name,
+      asIcon,
+      disabled,
+      alignment,
+      className,
+      disableDeselect,
+    } = this.props;
+
+    const {
       inputRef,
       btnRef,
       dates,
@@ -430,22 +443,12 @@ class DatePicker extends Component {
       formattedCurrentPeriod,
     } = this.state;
 
-    const {
-      t,
-      label,
-      name,
-      asIcon,
-      disabled,
-      alignment,
-      className,
-    } = this.props;
-
     function getValidity(validity) {
       if (disabled) return '';
 
       if (validity === null) return 'bg-white';
 
-      if (validity) return 'bg-white is-valid';
+      if (validity && dates !== DATE_DOT_FORMAT) return 'bg-white is-valid';
 
       return 'bg-white is-invalid';
     }
@@ -487,7 +490,7 @@ class DatePicker extends Component {
               />
               <ClearButton
                 handler={this.handleClear}
-                isVisible={!disabled && dates !== DATE_DOT_FORMAT}
+                isVisible={!disabled && dates !== DATE_DOT_FORMAT && !disableDeselect}
               />
             </label>
           )}
