@@ -117,6 +117,7 @@ const propTypes = {
   required: PropTypes.bool,
   valid: PropTypes.bool,
   disabled: PropTypes.bool,
+  disableDeselect: PropTypes.bool,
 };
 
 const defaultProps = {
@@ -126,6 +127,7 @@ const defaultProps = {
   required: false,
   valid: null,
   disabled: false,
+  disableDeselect: false,
 };
 
 class TimePicker extends Component {
@@ -465,7 +467,7 @@ class TimePicker extends Component {
   }
 
   updateParent(showContainer) {
-    const { inputRef, time: value } = this.state;
+    const { inputRef, time } = this.state;
 
     const {
       value: prevValue,
@@ -473,10 +475,16 @@ class TimePicker extends Component {
       name,
     } = this.props;
 
-    const isValueDifferent = value !== prevValue;
+    const isValueDifferent = time !== prevValue;
 
     this.setState({ showContainer }, () => {
-      if (isValueDifferent) onChange({ target: { name, value } });
+      if (isValueDifferent) {
+        const value = time === FALLBACK_TIME
+          ? ''
+          : time;
+
+        onChange({ target: { name, value } });
+      }
 
       inputRef.current.blur();
     });
@@ -521,6 +529,13 @@ class TimePicker extends Component {
 
   render() {
     const {
+      label,
+      disabled,
+      className,
+      disableDeselect,
+    } = this.props;
+
+    const {
       inputRef,
       hoursRef,
       minutesRef,
@@ -534,12 +549,6 @@ class TimePicker extends Component {
       hoursList,
       minutesList,
     } = this.state;
-
-    const {
-      label,
-      disabled,
-      className,
-    } = this.props;
 
     function getValidity(validity) {
       if (disabled) return 'disabled';
@@ -584,7 +593,7 @@ class TimePicker extends Component {
           />
           <ClearButton
             handler={this.handleClear}
-            isVisible={!disabled && time !== FALLBACK_TIME}
+            isVisible={!disabled && time !== FALLBACK_TIME && !disableDeselect}
           />
         </label>
         {showContainer ? (

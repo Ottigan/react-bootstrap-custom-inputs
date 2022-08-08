@@ -1,6 +1,6 @@
 {
   "name": "react-bootstrap-custom-inputs",
-  "version": "1.8.13",
+  "version": "1.8.14",
   "private": false,
   "description": "React compatible inputs adhering to Bootstrap theme.",
   "keywords": [
@@ -61,7 +61,7 @@
     "@storybook/addon-links": "^6.5.9",
     "@storybook/builder-webpack5": "^6.5.9",
     "@storybook/manager-webpack5": "^6.5.9",
-    "@storybook/react": "^6.5.9",
+    "@storybook/react": "^6.5.10",
     "@storybook/testing-library": "^0.0.13",
     "@testing-library/dom": "^8.11.3",
     "@testing-library/jest-dom": "^5.16.2",
