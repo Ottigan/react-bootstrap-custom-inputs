@@ -18,6 +18,7 @@ function App({ t }) {
   const [time, setTime] = useState('');
 
   useEffect(() => {
+    setTimeout(() => setText(''), 5000);
     setTimeout(() => setTime('18:00'), 3000);
     setTimeout(() => setText('foo'), 3000);
   }, []);
